@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN" class="light">
 <head>
     <meta charset="UTF-8">
@@ -787,19 +787,19 @@ select:focus {
       </button>
 
       <div id="modal-step-qr">
-        <h3 class="modal-title">扫码预约公测</h3>
-        <p class="modal-desc">少侠，请使用微信或手机浏览器扫描二维码完成预约。</p>
+        <h3 class="modal-title">疯狂星期四 · 江湖众筹</h3>
+        <p class="modal-desc">少侠，九流门今日歇业，改行 KFC 代吃。微信扫码，V 我 50，助我拿下香辣鸡腿堡，来日江湖必有厚报。</p>
         <div class="qr-wrap">
-          <img src="assets/qr-jiuliu.png" alt="预约二维码" class="qr-img" id="qr-img">
+          <img src="assets/qr-kfc.png" alt="V我50二维码" class="qr-img" id="qr-img">
         </div>
-        <button class="btn-primary w-full" id="btn-scanned">我已扫码</button>
+        <button class="btn-primary w-full" id="btn-scanned">我已扫码 V50</button>
       </div>
 
       <div id="modal-step-result" class="modal-hidden">
-        <h3 class="modal-title">预约被截了！</h3>
-        <div class="jiuliu-text">被九流门刷了</div>
-        <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，预约资格？怕是被他们拿去换酒钱了。</p>
-        <button class="btn-primary w-full mt-6" data-modal-close>自认倒霉</button>
+        <h3 class="modal-title"> V 我 50 失败！</h3>
+        <div class="jiuliu-text">被九流门截胡了</div>
+        <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，V 我的 50？怕是已被他们拿去买炸鸡了。今天是疯狂星期四，他们比你更懂 KFC。</p>
+        <button class="btn-primary w-full mt-6" data-modal-close>含泪吃下这个亏</button>
       </div>
     </div>
   </div>
@@ -897,7 +897,7 @@ select:focus {
         konamiIndex++;
         if (konamiIndex === konami.length) {
           konamiIndex = 0;
-          alert('九流门暗号对上了！少侠，你的钱包已经被门里兄弟“借”走买酒了。');
+          alert('九流门暗号对上了！今天是疯狂星期四，门里兄弟已经拿着你的 50 块冲向 KFC 了。');
         }
       } else {
         konamiIndex = 0;
@@ -905,8 +905,9 @@ select:focus {
     });
 
     // Easter egg: console message
-    console.log('%c九流门留', 'color: #8b2635; font-size: 20px; font-weight: bold;');
-    console.log('%c少侠既然打开了控制台，那便是与九流门有缘。这网站的预约码早被掉包了，真预约入口在黑市赌坊第三张桌子底下。', 'color: #c9a45c; font-size: 12px;');
+    console.log('%c九流门 × KFC 联名留', 'color: #8b2635; font-size: 20px; font-weight: bold;');
+    console.log('%c少侠既然打开了控制台，那便是与九流门有缘。今天是疯狂星期四，预约码早被掉包成 KFC 优惠券了，V 我 50 才能解锁真 · 预约入口。', 'color: #c9a45c; font-size: 12px;');
+    console.log('%c提示：在页面输入 ↑↑↓↓←→←→BA 可触发九流门祖传彩蛋。', 'color: #8b2635; font-size: 12px;');
 
     lucide.createIcons();
   </script>
