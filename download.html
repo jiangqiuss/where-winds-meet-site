@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公测预约</title>
+    <style id="theme-vars">
+:root {
+  /* Brand palette — 暗金史诗 */
+  --wheat-black: #070707;
+  --wheat-void: #0d0c0b;
+  --wheat-ink: #141312;
+  --wheat-charcoal: #1f1d1b;
+  --wheat-stone: #2a2724;
+  --wheat-bronze: #4a3f30;
+
+  --gold-dim: #6b5c3e;
+  --gold-muted: #967d4a;
+  --gold-base: #c9a45c;
+  --gold-bright: #dbb97a;
+  --gold-pale: #f0d9a6;
+  --gold-shimmer: #fff0cc;
+
+  --crimson-deep: #5c1a22;
+  --crimson-base: #8b2635;
+  --crimson-bright: #b63838;
+  --crimson-glow: rgba(182, 56, 56, 0.18);
+
+  --milk-100: #f5f0e6;
+  --milk-200: #e6dcc8;
+  --milk-300: #c7bba4;
+  --milk-400: #9f9586;
+  --milk-500: #6b655c;
+  --milk-600: #4a4640;
+  --milk-700: #2e2c29;
+
+  /* Semantic tokens with brand prefix */
+  --wheat-background: var(--wheat-void);
+  --wheat-foreground: var(--milk-100);
+  --wheat-card: var(--wheat-charcoal);
+  --wheat-card-foreground: var(--milk-100);
+  --wheat-popover: var(--wheat-stone);
+  --wheat-popover-foreground: var(--milk-100);
+  --wheat-primary: var(--gold-base);
+  --wheat-primary-foreground: var(--wheat-black);
+  --wheat-muted: var(--wheat-stone);
+  --wheat-muted-foreground: var(--milk-400);
+  --wheat-border: var(--wheat-bronze);
+  --wheat-input: var(--wheat-stone);
+  --wheat-ring: var(--gold-base);
+
+  --wheat-radius-sm: 4px;
+  --wheat-radius-md: 8px;
+  --wheat-radius-lg: 12px;
+  --wheat-radius-full: 9999px;
+
+  /* State colors */
+  --state-success: #4d8c68;
+  --state-warning: #c49a45;
+  --state-error: var(--crimson-bright);
+  --state-info: #5a8ab0;
+
+  /* Typography */
+  --font-display: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+  --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 180ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+}
+
+@layer theme {
+  :root {
+    --color-background: var(--wheat-background);
+    --color-foreground: var(--wheat-foreground);
+    --color-card: var(--wheat-card);
+    --color-card-foreground: var(--wheat-card-foreground);
+    --color-popover: var(--wheat-popover);
+    --color-popover-foreground: var(--wheat-popover-foreground);
+    --color-primary: var(--wheat-primary);
+    --color-primary-foreground: var(--wheat-primary-foreground);
+    --color-muted: var(--wheat-muted);
+    --color-muted-foreground: var(--wheat-muted-foreground);
+    --color-border: var(--wheat-border);
+    --color-input: var(--wheat-input);
+    --color-ring: var(--wheat-ring);
+  }
+}
+
+/* Global surface */
+html {
+  scroll-behavior: smooth;
+  background: var(--wheat-background);
+  color: var(--wheat-foreground);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--wheat-background);
+  color: var(--milk-100);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display typography */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-hero {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: var(--gold-pale);
+  text-shadow: 0 2px 28px rgba(201, 164, 92, 0.18);
+}
+
+.text-section {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  color: var(--milk-100);
+}
+
+.text-subhead {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.35;
+  color: var(--gold-bright);
+}
+
+/* Body scale */
+.text-body-lg {
+  font-size: 1.125rem;
+  color: var(--milk-200);
+}
+
+.text-body {
+  font-size: 1rem;
+  color: var(--milk-300);
+}
+
+.text-caption {
+  font-size: 0.875rem;
+  color: var(--milk-400);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Links */
+a {
+  color: var(--gold-base);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+a:hover {
+  color: var(--gold-bright);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--wheat-black);
+  background: linear-gradient(135deg, var(--gold-base), var(--gold-bright));
+  border: 1px solid var(--gold-bright);
+  border-radius: var(--wheat-radius-md);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201, 164, 92, 0.22);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--gold-base);
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--wheat-radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.btn-outline:hover {
+  color: var(--wheat-black);
+  background: var(--gold-base);
+  border-color: var(--gold-base);
+}
+
+/* Cards */
+.card {
+  background: rgba(20, 19, 18, 0.78);
+  border: 1px solid var(--wheat-bronze);
+  border-radius: var(--wheat-radius-lg);
+  backdrop-filter: blur(8px);
+  transition: transform var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--gold-dim);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+/* Section helpers */
+.section-dark {
+  background: var(--wheat-void);
+  position: relative;
+}
+
+.section-charcoal {
+  background: var(--wheat-ink);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(90deg, var(--gold-base), var(--gold-pale), var(--gold-base));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.divider-gold {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-base), transparent);
+}
+
+/* Form controls */
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  color: var(--milk-100);
+  background: var(--wheat-stone);
+  border: 1px solid var(--wheat-bronze);
+  border-radius: var(--wheat-radius-md);
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--milk-500);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--gold-base);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.15);
+}
+
+/* Utility accents */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--wheat-radius-full);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Selection */
+::selection {
+  background: var(--gold-dim);
+  color: var(--milk-100);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--wheat-ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--wheat-bronze);
+  border-radius: var(--wheat-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dim);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--wheat-background);
+    --color-foreground: var(--wheat-foreground);
+    --color-card: var(--wheat-card);
+    --color-card-foreground: var(--wheat-card-foreground);
+    --color-popover: var(--wheat-popover);
+    --color-popover-foreground: var(--wheat-popover-foreground);
+    --color-primary: var(--wheat-primary);
+    --color-primary-foreground: var(--wheat-primary-foreground);
+    --color-muted: var(--wheat-muted);
+    --color-muted-foreground: var(--wheat-muted-foreground);
+    --color-border: var(--wheat-border);
+    --color-input: var(--wheat-input);
+    --color-ring: var(--wheat-ring);
+    --radius-sm: var(--wheat-radius-sm);
+    --radius-md: var(--wheat-radius-md);
+    --radius-lg: var(--wheat-radius-lg);
+  }
+  @layer base {
+    body { background: var(--wheat-background); color: var(--wheat-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--wheat-background); }
+      .text-background { color: var(--wheat-background); }
+      .border-background { border-color: var(--wheat-background); }
+      .ring-background { --tw-ring-color: var(--wheat-background); }
+      .bg-foreground { background-color: var(--wheat-foreground); }
+      .text-foreground { color: var(--wheat-foreground); }
+      .border-foreground { border-color: var(--wheat-foreground); }
+      .ring-foreground { --tw-ring-color: var(--wheat-foreground); }
+      .bg-card { background-color: var(--wheat-card); }
+      .text-card { color: var(--wheat-card); }
+      .border-card { border-color: var(--wheat-card); }
+      .ring-card { --tw-ring-color: var(--wheat-card); }
+      .bg-card-foreground { background-color: var(--wheat-card-foreground); }
+      .text-card-foreground { color: var(--wheat-card-foreground); }
+      .border-card-foreground { border-color: var(--wheat-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--wheat-card-foreground); }
+      .bg-popover { background-color: var(--wheat-popover); }
+      .text-popover { color: var(--wheat-popover); }
+      .border-popover { border-color: var(--wheat-popover); }
+      .ring-popover { --tw-ring-color: var(--wheat-popover); }
+      .bg-popover-foreground { background-color: var(--wheat-popover-foreground); }
+      .text-popover-foreground { color: var(--wheat-popover-foreground); }
+      .border-popover-foreground { border-color: var(--wheat-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--wheat-popover-foreground); }
+      .bg-primary { background-color: var(--wheat-primary); }
+      .text-primary { color: var(--wheat-primary); }
+      .border-primary { border-color: var(--wheat-primary); }
+      .ring-primary { --tw-ring-color: var(--wheat-primary); }
+      .bg-primary-foreground { background-color: var(--wheat-primary-foreground); }
+      .text-primary-foreground { color: var(--wheat-primary-foreground); }
+      .border-primary-foreground { border-color: var(--wheat-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--wheat-primary-foreground); }
+      .bg-muted { background-color: var(--wheat-muted); }
+      .text-muted { color: var(--wheat-muted); }
+      .border-muted { border-color: var(--wheat-muted); }
+      .ring-muted { --tw-ring-color: var(--wheat-muted); }
+      .bg-muted-foreground { background-color: var(--wheat-muted-foreground); }
+      .text-muted-foreground { color: var(--wheat-muted-foreground); }
+      .border-muted-foreground { border-color: var(--wheat-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--wheat-muted-foreground); }
+      .bg-border { background-color: var(--wheat-border); }
+      .text-border { color: var(--wheat-border); }
+      .border-border { border-color: var(--wheat-border); }
+      .ring-border { --tw-ring-color: var(--wheat-border); }
+      .bg-input { background-color: var(--wheat-input); }
+      .text-input { color: var(--wheat-input); }
+      .border-input { border-color: var(--wheat-input); }
+      .ring-input { --tw-ring-color: var(--wheat-input); }
+      .bg-ring { background-color: var(--wheat-ring); }
+      .text-ring { color: var(--wheat-ring); }
+      .border-ring { border-color: var(--wheat-ring); }
+      .ring-ring { --tw-ring-color: var(--wheat-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <header class="sticky top-0 z-50 border-b border-[var(--wheat-bronze)] bg-[var(--wheat-void)]/95 backdrop-blur">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="index.html" class="font-display text-xl tracking-widest text-[var(--gold-pale)]">燕云十六声</a>
+        <ul class="hidden items-center gap-8 text-sm md:flex">
+          <li><a href="index.html" data-dom-id="nav-index" class="text-[var(--milk-300)] hover:text-[var(--gold-bright)]">首页</a></li>
+          <li><a href="world.html" data-dom-id="nav-world" class="text-[var(--milk-300)] hover:text-[var(--gold-bright)]">江湖</a></li>
+          <li><a href="gameplay.html" data-dom-id="nav-gameplay" class="text-[var(--milk-300)] hover:text-[var(--gold-bright)]">玩法</a></li>
+          <li><a href="download.html" data-dom-id="nav-download" class="text-[var(--gold-bright)]">预约</a></li>
+        </ul>
+        <a href="#reserve-form" class="btn-primary py-2 px-5 text-sm">立即预约</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('assets/download-hero.jpg');"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[var(--wheat-void)]/70 via-[var(--wheat-void)]/50 to-[var(--wheat-void)]"></div>
+        <div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <p class="mb-4 text-caption">WHERE WINDS MEET · 公测将至</p>
+          <h1 class="text-hero mb-6">公测预约</h1>
+          <p class="text-body-lg mb-10">预约即赠限定外观 · 乱世风云一剑开</p>
+
+          <div data-dom-id="countdown-timer" class="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div class="card p-5 text-center">
+              <span id="cd-days" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+              <span class="text-xs tracking-widest text-[var(--milk-500)]">天</span>
+            </div>
+            <div class="card p-5 text-center">
+              <span id="cd-hours" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+              <span class="text-xs tracking-widest text-[var(--milk-500)]">时</span>
+            </div>
+            <div class="card p-5 text-center">
+              <span id="cd-minutes" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+              <span class="text-xs tracking-widest text-[var(--milk-500)]">分</span>
+            </div>
+            <div class="card p-5 text-center">
+              <span id="cd-seconds" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+              <span class="text-xs tracking-widest text-[var(--milk-500)]">秒</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a href="#reserve-form" class="btn-primary w-full sm:w-auto">立即预约</a>
+            <a href="#platforms" class="btn-outline w-full sm:w-auto">选择平台</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="platforms" class="section-charcoal py-20">
+        <div class="mx-auto max-w-6xl px-6">
+          <div class="mb-12 text-center reveal">
+            <p class="text-caption mb-3">PLATFORM</p>
+            <h2 class="text-section mb-4">选择你的江湖入口</h2>
+            <div class="divider-gold mx-auto"></div>
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-3">
+            <article class="card platform-card p-8 text-center reveal hover:shadow-[0_0_30px_rgba(201,164,92,0.35)]">
+              <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
+                <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <h3 class="text-subhead mb-2">PC 客户端</h3>
+              <p class="text-body mb-6">Windows 10 / 11 · 推荐 RTX 3060 及以上</p>
+              <a href="#reserve-form" data-dom-id="cta-download-pc" class="btn-primary w-full">下载客户端</a>
+            </article>
+
+            <article class="card platform-card p-8 text-center reveal hover:shadow-[0_0_30px_rgba(201,164,92,0.35)]">
+              <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
+                <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6" y="2" width="12" height="20" rx="3"></rect>
+                  <line x1="10" y1="18" x2="14" y2="18"></line>
+                </svg>
+              </div>
+              <h3 class="text-subhead mb-2">iOS</h3>
+              <p class="text-body mb-6">App Store · iPhone 12 及以上机型</p>
+              <a href="#reserve-form" data-dom-id="cta-download-ios" class="btn-primary w-full">下载客户端</a>
+            </article>
+
+            <article class="card platform-card p-8 text-center reveal hover:shadow-[0_0_30px_rgba(201,164,92,0.35)]">
+              <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
+                <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                  <path d="M12 18h.01"></path>
+                </svg>
+              </div>
+              <h3 class="text-subhead mb-2">Android</h3>
+              <p class="text-body mb-6">各大应用商店 · Android 10 及以上</p>
+              <a href="#reserve-form" data-dom-id="cta-download-mobile" class="btn-primary w-full">下载客户端</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="reserve-form" class="section-dark py-20">
+        <div class="mx-auto max-w-2xl px-6">
+          <div class="mb-10 text-center reveal">
+            <p class="text-caption mb-3">RESERVATION</p>
+            <h2 class="text-section mb-4">立即预约</h2>
+            <div class="divider-gold mx-auto mb-6"></div>
+            <p class="text-body">填写信息，公测开启后第一时间踏入江湖。</p>
+          </div>
+
+          <form data-dom-id="form-reserve" class="card p-8 reveal" novalidate>
+            <div class="space-y-5">
+              <div>
+                <label class="mb-2 block text-sm text-[var(--milk-200)]" for="phone">手机号码</label>
+                <input id="phone" name="phone" type="tel" placeholder="请输入 11 位手机号" class="w-full" required>
+                <p id="phone-error" class="mt-2 hidden text-sm text-[var(--state-error)]">请输入有效的手机号码</p>
+              </div>
+
+              <div>
+                <label class="mb-2 block text-sm text-[var(--milk-200)]" for="code">验证码</label>
+                <div class="flex gap-3">
+                  <input id="code" name="code" type="text" maxlength="6" placeholder="请输入验证码" class="flex-1" required>
+                  <button type="button" id="send-code" class="btn-outline whitespace-nowrap px-4">获取验证码</button>
+                </div>
+              </div>
+
+              <div>
+                <label class="mb-2 block text-sm text-[var(--milk-200)]" for="platform">平台选择</label>
+                <select id="platform" name="platform" class="w-full" required>
+                  <option value="">请选择预约平台</option>
+                  <option value="pc">PC</option>
+                  <option value="ios">iOS</option>
+                  <option value="android">Android</option>
+                </select>
+              </div>
+
+              <label class="flex cursor-pointer items-start gap-3">
+                <input id="agree" name="agree" type="checkbox" class="mt-1 h-4 w-4 accent-[var(--gold-base)]" required>
+                <span class="text-sm text-[var(--milk-400)]">我已阅读并同意<a href="#" class="underline decoration-[var(--gold-dim)] underline-offset-4">《用户服务协议》</a>与<a href="#" class="underline decoration-[var(--gold-dim)] underline-offset-4">《隐私政策》</a></span>
+              </label>
+            </div>
+
+            <button data-dom-id="submit-reserve" type="submit" class="btn-primary mt-8 w-full">确认预约</button>
+
+            <div id="reserve-success" class="mt-6 hidden rounded-lg border border-[var(--state-success)] bg-[var(--state-success)]/10 p-4 text-center text-[var(--milk-100)]">
+              <p class="font-semibold">预约成功</p>
+              <p class="mt-1 text-sm text-[var(--milk-300)]">乱世风云，待君一剑开之。</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section-charcoal py-20">
+        <div class="mx-auto max-w-4xl px-6">
+          <div class="mb-12 text-center reveal">
+            <p class="text-caption mb-3">REWARDS</p>
+            <h2 class="text-section mb-4">预约里程碑奖励</h2>
+            <div class="divider-gold mx-auto mb-6"></div>
+            <p class="text-body">集结乱世英豪，解锁全服限定好礼。</p>
+          </div>
+
+          <div class="mb-10 reveal">
+            <div class="mb-2 flex justify-between text-sm">
+              <span class="text-[var(--milk-200)]">当前预约人数</span>
+              <span class="font-display text-[var(--gold-pale)]">235 万 / 500 万</span>
+            </div>
+            <div class="h-3 w-full overflow-hidden rounded-full bg-[var(--wheat-stone)]">
+              <div id="reward-progress" class="h-full rounded-full bg-gradient-to-r from-[var(--gold-muted)] via-[var(--gold-base)] to-[var(--gold-bright)]" style="width: 0%;" data-width="47%"></div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="card flex items-center gap-5 p-5 reveal">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--crimson-deep)] text-[var(--gold-pale)] font-display">50万</div>
+              <div>
+                <h4 class="text-subhead mb-1">铜钱 × 88888</h4>
+                <p class="text-sm text-[var(--milk-500)]">行走江湖，盘缠先行</p>
+              </div>
+              <span class="ml-auto text-xs text-[var(--state-success)]">已解锁</span>
+            </div>
+            <div class="card flex items-center gap-5 p-5 reveal">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--crimson-deep)] text-[var(--gold-pale)] font-display">100万</div>
+              <div>
+                <h4 class="text-subhead mb-1">限定外观 · 苍云游侠</h4>
+                <p class="text-sm text-[var(--milk-500)]">一袭白衣，入世出尘</p>
+              </div>
+              <span class="ml-auto text-xs text-[var(--state-success)]">已解锁</span>
+            </div>
+            <div class="card flex items-center gap-5 p-5 reveal">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--wheat-bronze)] text-[var(--gold-pale)] font-display">200万</div>
+              <div>
+                <h4 class="text-subhead mb-1">坐骑 · 墨羽惊风</h4>
+                <p class="text-sm text-[var(--milk-500)]">日行千里，踏遍河山</p>
+              </div>
+              <span class="ml-auto text-xs text-[var(--gold-bright)]">即将解锁</span>
+            </div>
+            <div class="card flex items-center gap-5 p-5 reveal">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--wheat-bronze)] text-[var(--gold-pale)] font-display">500万</div>
+              <div>
+                <h4 class="text-subhead mb-1">限定称号 · 乱世开山人</h4>
+                <p class="text-sm text-[var(--milk-500)]">一剑开天，留名青史</p>
+              </div>
+              <span class="ml-auto text-xs text-[var(--milk-500)]">未解锁</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-dark py-20">
+        <div class="mx-auto max-w-5xl px-6 text-center">
+          <div class="mb-12 reveal">
+            <p class="text-caption mb-3">COMMUNITY</p>
+            <h2 class="text-section mb-4">关注官方社区</h2>
+            <div class="divider-gold mx-auto"></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
+              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span class="text-sm text-[var(--milk-200)]">官方微博</span>
+            </a>
+            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
+              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2"></rect>
+              </svg>
+              <span class="text-sm text-[var(--milk-200)]">B站</span>
+            </a>
+            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
+              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span class="text-sm text-[var(--milk-200)]">微信公众号</span>
+            </a>
+            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
+              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span class="text-sm text-[var(--milk-200)]">Discord</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-[var(--wheat-bronze)] bg-[var(--wheat-black)] py-8 text-center">
+      <p class="mx-auto max-w-3xl px-6 text-xs leading-relaxed text-[var(--milk-500)]">
+        本网站为粉丝设计作品，非官方站点。燕云十六声版权归原开发商所有。
+      </p>
+    </footer>
+
+    <script>
+      (function () {
+        lucide.createIcons();
+
+        const targetDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        function updateCountdown() {
+          const diff = targetDate - Date.now();
+          const days = document.getElementById('cd-days');
+          const hours = document.getElementById('cd-hours');
+          const minutes = document.getElementById('cd-minutes');
+          const seconds = document.getElementById('cd-seconds');
+          if (!days || !hours || !minutes || !seconds) return;
+          if (diff <= 0) {
+            days.textContent = hours.textContent = minutes.textContent = seconds.textContent = '00';
+            return;
+          }
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const m = Math.floor((diff / (1000 * 60)) % 60);
+          const s = Math.floor((diff / 1000) % 60);
+          days.textContent = String(d).padStart(2, '0');
+          hours.textContent = String(h).padStart(2, '0');
+          minutes.textContent = String(m).padStart(2, '0');
+          seconds.textContent = String(s).padStart(2, '0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        const form = document.querySelector('[data-dom-id="form-reserve"]');
+        const phoneInput = document.getElementById('phone');
+        const phoneError = document.getElementById('phone-error');
+        const successPanel = document.getElementById('reserve-success');
+
+        function isValidPhone(value) {
+          return /^1[3-9]\d{9}$/.test(value.replace(/\s/g, ''));
+        }
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          successPanel.classList.add('hidden');
+          const phone = phoneInput.value.trim();
+          if (!isValidPhone(phone)) {
+            phoneError.classList.remove('hidden');
+            phoneInput.focus();
+            return;
+          }
+          phoneError.classList.add('hidden');
+          successPanel.classList.remove('hidden');
+          form.reset();
+        });
+
+        document.getElementById('send-code').addEventListener('click', function () {
+          const phone = phoneInput.value.trim();
+          if (!isValidPhone(phone)) {
+            phoneError.classList.remove('hidden');
+            phoneInput.focus();
+            return;
+          }
+          phoneError.classList.add('hidden');
+          this.textContent = '已发送';
+          this.disabled = true;
+          setTimeout(() => {
+            this.textContent = '获取验证码';
+            this.disabled = false;
+          }, 3000);
+        });
+
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              const progress = entry.target.querySelector('#reward-progress');
+              if (progress) {
+                progress.style.width = progress.getAttribute('data-width');
+              }
+            }
+          });
+        }, { threshold: 0.15 });
+        revealElements.forEach((el) => observer.observe(el));
+
+        const progress = document.getElementById('reward-progress');
+        if (progress && progress.getBoundingClientRect().top < window.innerHeight) {
+          progress.style.width = progress.getAttribute('data-width');
+        }
+      })();
+    </script>
+</body>
+</html>

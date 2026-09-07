@@ -1,0 +1,933 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>江湖百艺</title>
+    <style id="theme-vars">
+:root {
+  /* Brand palette — 暗金史诗 */
+  --wheat-black: #070707;
+  --wheat-void: #0d0c0b;
+  --wheat-ink: #141312;
+  --wheat-charcoal: #1f1d1b;
+  --wheat-stone: #2a2724;
+  --wheat-bronze: #4a3f30;
+
+  --gold-dim: #6b5c3e;
+  --gold-muted: #967d4a;
+  --gold-base: #c9a45c;
+  --gold-bright: #dbb97a;
+  --gold-pale: #f0d9a6;
+  --gold-shimmer: #fff0cc;
+
+  --crimson-deep: #5c1a22;
+  --crimson-base: #8b2635;
+  --crimson-bright: #b63838;
+  --crimson-glow: rgba(182, 56, 56, 0.18);
+
+  --milk-100: #f5f0e6;
+  --milk-200: #e6dcc8;
+  --milk-300: #c7bba4;
+  --milk-400: #9f9586;
+  --milk-500: #6b655c;
+  --milk-600: #4a4640;
+  --milk-700: #2e2c29;
+
+  /* Semantic tokens with brand prefix */
+  --wheat-background: var(--wheat-void);
+  --wheat-foreground: var(--milk-100);
+  --wheat-card: var(--wheat-charcoal);
+  --wheat-card-foreground: var(--milk-100);
+  --wheat-popover: var(--wheat-stone);
+  --wheat-popover-foreground: var(--milk-100);
+  --wheat-primary: var(--gold-base);
+  --wheat-primary-foreground: var(--wheat-black);
+  --wheat-muted: var(--wheat-stone);
+  --wheat-muted-foreground: var(--milk-400);
+  --wheat-border: var(--wheat-bronze);
+  --wheat-input: var(--wheat-stone);
+  --wheat-ring: var(--gold-base);
+
+  --wheat-radius-sm: 4px;
+  --wheat-radius-md: 8px;
+  --wheat-radius-lg: 12px;
+  --wheat-radius-full: 9999px;
+
+  /* State colors */
+  --state-success: #4d8c68;
+  --state-warning: #c49a45;
+  --state-error: var(--crimson-bright);
+  --state-info: #5a8ab0;
+
+  /* Typography */
+  --font-display: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+  --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 180ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+}
+
+@layer theme {
+  :root {
+    --color-background: var(--wheat-background);
+    --color-foreground: var(--wheat-foreground);
+    --color-card: var(--wheat-card);
+    --color-card-foreground: var(--wheat-card-foreground);
+    --color-popover: var(--wheat-popover);
+    --color-popover-foreground: var(--wheat-popover-foreground);
+    --color-primary: var(--wheat-primary);
+    --color-primary-foreground: var(--wheat-primary-foreground);
+    --color-muted: var(--wheat-muted);
+    --color-muted-foreground: var(--wheat-muted-foreground);
+    --color-border: var(--wheat-border);
+    --color-input: var(--wheat-input);
+    --color-ring: var(--wheat-ring);
+  }
+}
+
+/* Global surface */
+html {
+  scroll-behavior: smooth;
+  background: var(--wheat-background);
+  color: var(--wheat-foreground);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--wheat-background);
+  color: var(--milk-100);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display typography */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-hero {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: var(--gold-pale);
+  text-shadow: 0 2px 28px rgba(201, 164, 92, 0.18);
+}
+
+.text-section {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  color: var(--milk-100);
+}
+
+.text-subhead {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.35;
+  color: var(--gold-bright);
+}
+
+/* Body scale */
+.text-body-lg {
+  font-size: 1.125rem;
+  color: var(--milk-200);
+}
+
+.text-body {
+  font-size: 1rem;
+  color: var(--milk-300);
+}
+
+.text-caption {
+  font-size: 0.875rem;
+  color: var(--milk-400);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Links */
+a {
+  color: var(--gold-base);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+a:hover {
+  color: var(--gold-bright);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--wheat-black);
+  background: linear-gradient(135deg, var(--gold-base), var(--gold-bright));
+  border: 1px solid var(--gold-bright);
+  border-radius: var(--wheat-radius-md);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201, 164, 92, 0.22);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--gold-base);
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--wheat-radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.btn-outline:hover {
+  color: var(--wheat-black);
+  background: var(--gold-base);
+  border-color: var(--gold-base);
+}
+
+/* Cards */
+.card {
+  background: rgba(20, 19, 18, 0.78);
+  border: 1px solid var(--wheat-bronze);
+  border-radius: var(--wheat-radius-lg);
+  backdrop-filter: blur(8px);
+  transition: transform var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--gold-dim);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+/* Section helpers */
+.section-dark {
+  background: var(--wheat-void);
+  position: relative;
+}
+
+.section-charcoal {
+  background: var(--wheat-ink);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(90deg, var(--gold-base), var(--gold-pale), var(--gold-base));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.divider-gold {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-base), transparent);
+}
+
+/* Form controls */
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  color: var(--milk-100);
+  background: var(--wheat-stone);
+  border: 1px solid var(--wheat-bronze);
+  border-radius: var(--wheat-radius-md);
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--milk-500);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--gold-base);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.15);
+}
+
+/* Utility accents */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--wheat-radius-full);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Selection */
+::selection {
+  background: var(--gold-dim);
+  color: var(--milk-100);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--wheat-ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--wheat-bronze);
+  border-radius: var(--wheat-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dim);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--wheat-background);
+    --color-foreground: var(--wheat-foreground);
+    --color-card: var(--wheat-card);
+    --color-card-foreground: var(--wheat-card-foreground);
+    --color-popover: var(--wheat-popover);
+    --color-popover-foreground: var(--wheat-popover-foreground);
+    --color-primary: var(--wheat-primary);
+    --color-primary-foreground: var(--wheat-primary-foreground);
+    --color-muted: var(--wheat-muted);
+    --color-muted-foreground: var(--wheat-muted-foreground);
+    --color-border: var(--wheat-border);
+    --color-input: var(--wheat-input);
+    --color-ring: var(--wheat-ring);
+    --radius-sm: var(--wheat-radius-sm);
+    --radius-md: var(--wheat-radius-md);
+    --radius-lg: var(--wheat-radius-lg);
+  }
+  @layer base {
+    body { background: var(--wheat-background); color: var(--wheat-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--wheat-background); }
+      .text-background { color: var(--wheat-background); }
+      .border-background { border-color: var(--wheat-background); }
+      .ring-background { --tw-ring-color: var(--wheat-background); }
+      .bg-foreground { background-color: var(--wheat-foreground); }
+      .text-foreground { color: var(--wheat-foreground); }
+      .border-foreground { border-color: var(--wheat-foreground); }
+      .ring-foreground { --tw-ring-color: var(--wheat-foreground); }
+      .bg-card { background-color: var(--wheat-card); }
+      .text-card { color: var(--wheat-card); }
+      .border-card { border-color: var(--wheat-card); }
+      .ring-card { --tw-ring-color: var(--wheat-card); }
+      .bg-card-foreground { background-color: var(--wheat-card-foreground); }
+      .text-card-foreground { color: var(--wheat-card-foreground); }
+      .border-card-foreground { border-color: var(--wheat-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--wheat-card-foreground); }
+      .bg-popover { background-color: var(--wheat-popover); }
+      .text-popover { color: var(--wheat-popover); }
+      .border-popover { border-color: var(--wheat-popover); }
+      .ring-popover { --tw-ring-color: var(--wheat-popover); }
+      .bg-popover-foreground { background-color: var(--wheat-popover-foreground); }
+      .text-popover-foreground { color: var(--wheat-popover-foreground); }
+      .border-popover-foreground { border-color: var(--wheat-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--wheat-popover-foreground); }
+      .bg-primary { background-color: var(--wheat-primary); }
+      .text-primary { color: var(--wheat-primary); }
+      .border-primary { border-color: var(--wheat-primary); }
+      .ring-primary { --tw-ring-color: var(--wheat-primary); }
+      .bg-primary-foreground { background-color: var(--wheat-primary-foreground); }
+      .text-primary-foreground { color: var(--wheat-primary-foreground); }
+      .border-primary-foreground { border-color: var(--wheat-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--wheat-primary-foreground); }
+      .bg-muted { background-color: var(--wheat-muted); }
+      .text-muted { color: var(--wheat-muted); }
+      .border-muted { border-color: var(--wheat-muted); }
+      .ring-muted { --tw-ring-color: var(--wheat-muted); }
+      .bg-muted-foreground { background-color: var(--wheat-muted-foreground); }
+      .text-muted-foreground { color: var(--wheat-muted-foreground); }
+      .border-muted-foreground { border-color: var(--wheat-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--wheat-muted-foreground); }
+      .bg-border { background-color: var(--wheat-border); }
+      .text-border { color: var(--wheat-border); }
+      .border-border { border-color: var(--wheat-border); }
+      .ring-border { --tw-ring-color: var(--wheat-border); }
+      .bg-input { background-color: var(--wheat-input); }
+      .text-input { color: var(--wheat-input); }
+      .border-input { border-color: var(--wheat-input); }
+      .ring-input { --tw-ring-color: var(--wheat-input); }
+      .bg-ring { background-color: var(--wheat-ring); }
+      .text-ring { color: var(--wheat-ring); }
+      .border-ring { border-color: var(--wheat-ring); }
+      .ring-ring { --tw-ring-color: var(--wheat-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<!-- 九流门留言：百艺皆可学，骗术最上头。 -->
+<body class="min-h-screen font-sans antialiased bg-background text-foreground overflow-x-hidden">
+    <!-- Sticky top navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-wheat-void/90 backdrop-blur-md border-b border-wheat-bronze/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 lg:h-20">
+          <a href="index.html" class="flex items-center gap-2 text-gold-pale font-display text-xl tracking-widest hover:text-gold-bright transition-colors">
+            <span class="w-8 h-8 rounded-full border border-gold-dim bg-wheat-ink flex items-center justify-center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </span>
+            燕云十六声
+          </a>
+          <div class="hidden md:flex items-center gap-8">
+            <a href="index.html" data-dom-id="nav-index" class="text-sm tracking-widest text-milk-300 hover:text-gold-bright transition-colors">首页</a>
+            <a href="world.html" data-dom-id="nav-world" class="text-sm tracking-widest text-milk-300 hover:text-gold-bright transition-colors">江湖</a>
+            <a href="gameplay.html" data-dom-id="nav-gameplay" class="text-sm tracking-widest text-gold-bright border-b border-gold-base pb-1">百艺</a>
+            <a href="download.html" data-dom-id="nav-download" class="text-sm tracking-widest text-milk-300 hover:text-gold-bright transition-colors">下载</a>
+          </div>
+          <button id="mobile-menu-btn" class="md:hidden p-2 text-gold-base" aria-label="打开菜单">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden border-t border-wheat-bronze/40 bg-wheat-ink/95 backdrop-blur-md">
+        <div class="px-4 py-3 space-y-3">
+          <a href="index.html" data-dom-id="nav-index" class="block text-sm tracking-widest text-milk-300 hover:text-gold-bright">首页</a>
+          <a href="world.html" data-dom-id="nav-world" class="block text-sm tracking-widest text-milk-300 hover:text-gold-bright">江湖</a>
+          <a href="gameplay.html" data-dom-id="nav-gameplay" class="block text-sm tracking-widest text-gold-bright">百艺</a>
+          <a href="download.html" data-dom-id="nav-download" class="block text-sm tracking-widest text-milk-300 hover:text-gold-bright">下载</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero -->
+      <section class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden pt-16 lg:pt-20">
+        <div class="absolute inset-0 z-0">
+          <img src="assets/gameplay-martial.jpg" alt="江湖百艺" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-b from-wheat-void/70 via-wheat-void/40 to-wheat-void"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-wheat-void/60 via-transparent to-wheat-void/60"></div>
+        </div>
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto reveal is-visible">
+          <p class="text-caption mb-4 tracking-[0.2em]">GAMEPLAY</p>
+          <h1 class="text-hero mb-6" title="九流门内部代号：骗术百艺">江湖百艺</h1>
+          <div class="divider-gold mx-auto mb-6"></div>
+          <p class="text-subhead font-body text-milk-200">武无定格，术有百门</p>
+        </div>
+      </section>
+
+      <!-- Category tabs -->
+      <section class="relative z-10 -mt-16 pb-24 lg:pb-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-center gap-2 sm:gap-4 mb-10 reveal">
+            <button data-dom-id="tab-martial" class="tab-btn active px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-martial">武学</button>
+            <button data-dom-id="tab-explore" class="tab-btn px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-explore">探索</button>
+            <button data-dom-id="tab-life" class="tab-btn px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-life">生活</button>
+          </div>
+
+          <div class="tab-panels relative min-h-[420px]">
+            <div id="panel-martial" class="tab-panel active">
+              <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal">
+                  <img src="assets/feature-combat.jpg" alt="武学" class="w-full h-64 lg:h-96 object-cover" />
+                </div>
+                <div class="reveal">
+                  <p class="text-caption mb-3">MARTIAL ARTS</p>
+                  <h2 class="text-section mb-4">无招胜有招</h2>
+                  <div class="divider-gold mb-6"></div>
+                  <div class="space-y-4 text-body-lg">
+                    <p>《燕云十六声》打破传统门派桎梏，武学不以兵刃为界。你可赤手空拳以点穴制敌，亦可仗剑江湖挥洒剑气。</p>
+                    <p>点穴功夫讲究一击封穴，令对手陷入麻痹、眩晕、定身诸般状态；轻功踏雪无痕，飞檐走壁间可施展出蓄力一击。</p>
+                    <p>战斗中更可切换多般兵器，刀枪剑戟各有所长，组合连携自成一派。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="panel-explore" class="tab-panel">
+              <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal">
+                  <img src="assets/feature-explore.jpg" alt="探索" class="w-full h-64 lg:h-96 object-cover" />
+                </div>
+                <div class="reveal">
+                  <p class="text-caption mb-3">OPEN WORLD</p>
+                  <h2 class="text-section mb-4">山河有灵</h2>
+                  <div class="divider-gold mb-6"></div>
+                  <div class="space-y-4 text-body-lg">
+                    <p>燕云大地幅员辽阔，城池村镇、荒漠雪原、古刹密林皆可涉足。每一处角落都可能藏有前朝遗迹与江湖秘闻。</p>
+                    <p>地宫秘境机关重重，唯有破解五行八卦、推理解谜方能深入；路遇奇人异事，也许你的一念之间便会改写一段故事。</p>
+                    <p>昼夜更替、风雪雷雨皆为玩法，动态 ambient 事件让世界始终鲜活。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="panel-life" class="tab-panel">
+              <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal">
+                  <img src="assets/gameplay-life.jpg" alt="生活" class="w-full h-64 lg:h-96 object-cover" />
+                </div>
+                <div class="reveal">
+                  <p class="text-caption mb-3">LIFE SKILLS</p>
+                  <h2 class="text-section mb-4">人间烟火</h2>
+                  <div class="divider-gold mb-6"></div>
+                  <div class="space-y-4 text-body-lg">
+                    <p>江湖不止刀光剑影，亦有柴米油盐。研习医术可济世救人，采集百草炼制丹药；精通庖厨之道，烹制佳肴以飨同道。</p>
+                    <p>抚琴奏笛以音律会友，一曲高山流水可动人心弦；乔装易容化身他人，潜入敌营探查机密。</p>
+                    <p>垂钓溪边、赏花品茗，于乱世之中寻得一方宁静。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature grid -->
+      <section class="py-20 lg:py-28 bg-wheat-ink relative">
+        <div class="absolute inset-0 opacity-30 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(201,164,92,0.08), transparent 60%);"></div>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="text-center mb-14 reveal">
+            <p class="text-caption mb-3">FEATURES</p>
+            <h2 class="text-section mb-4">百艺在身</h2>
+            <div class="divider-gold mx-auto"></div>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
+              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+              </div>
+              <h3 class="text-subhead text-lg mb-2">点穴</h3>
+              <p class="text-body text-sm">以指力封穴，制敌于瞬息之间。</p>
+            </div>
+            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
+              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M8 7l4-4 4 4"/><path d="M8 17l4 4 4-4"/></svg>
+              </div>
+              <h3 class="text-subhead text-lg mb-2">轻功</h3>
+              <p class="text-body text-sm">踏水登萍，飞檐走壁如履平地。</p>
+            </div>
+            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
+              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M17 7l2-2"/><path d="M7 7L5 5"/></svg>
+              </div>
+              <h3 class="text-subhead text-lg mb-2">易容</h3>
+              <p class="text-body text-sm">改换形貌，潜行于江湖阴影。</p>
+            </div>
+            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
+              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+              </div>
+              <h3 class="text-subhead text-lg mb-2">音律</h3>
+              <p class="text-body text-sm">以曲通心，音波亦可退敌。</p>
+            </div>
+            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
+              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <h3 class="text-subhead text-lg mb-2">骑射</h3>
+              <p class="text-body text-sm">弓马娴熟，千里追风一箭。</p>
+            </div>
+            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
+              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              </div>
+              <h3 class="text-subhead text-lg mb-2">机关</h3>
+              <p class="text-body text-sm">巧破机括，智取地宫重宝。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Video / screenshot showcase -->
+      <section class="py-20 lg:py-28 bg-wheat-void">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12 reveal">
+            <p class="text-caption mb-3">CINEMATIC</p>
+            <h2 class="text-section mb-4">燕云掠影</h2>
+            <div class="divider-gold mx-auto"></div>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal group cursor-pointer">
+            <img src="assets/gameplay-ambient.jpg" alt="燕云掠影" class="w-full h-64 sm:h-80 lg:h-[480px] object-cover transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-wheat-void/30 group-hover:bg-wheat-void/20 transition-colors"></div>
+            <button class="play-btn absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-wheat-void/80 border border-gold-base text-gold-base flex items-center justify-center backdrop-blur-sm transition-transform duration-300 group-hover:scale-110" aria-label="播放视频">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="ml-1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          </div>
+          <p class="text-center text-body mt-6 reveal">点击观赏江湖风光 · 实机画面</p>
+        </div>
+      </section>
+
+      <!-- Footer CTA -->
+      <section class="py-20 lg:py-28 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-wheat-ink to-wheat-void"></div>
+        <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 50% 50%, rgba(139,38,53,0.15), transparent 70%);"></div>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
+          <p class="text-caption mb-4">ENTER THE WORLD</p>
+          <h2 class="text-section mb-6">踏入燕云，一诺千金</h2>
+          <p class="text-body-lg mb-10">预约游戏，第一时间体验江湖百艺、乱世风云。</p>
+          <a href="#reserve-modal" data-dom-id="cta-download" class="btn-primary text-base px-10 py-4 reserve-trigger">立即预约下载</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-wheat-bronze/30 bg-wheat-void py-8">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-body text-sm" title="九流门友情代运营">© 2026 燕云十六声 · All rights reserved · 九流门友情代运营</p>
+        <div class="flex items-center gap-6">
+          <a href="index.html" class="text-sm text-milk-400 hover:text-gold-bright">首页</a>
+          <a href="world.html" class="text-sm text-milk-400 hover:text-gold-bright">江湖</a>
+          <a href="gameplay.html" class="text-sm text-milk-400 hover:text-gold-bright">百艺</a>
+          <a href="download.html" class="text-sm text-milk-400 hover:text-gold-bright">下载</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Tab switching
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.target;
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          tabPanels.forEach(panel => {
+            if (panel.id === target) {
+              panel.classList.add('active');
+            } else {
+              panel.classList.remove('active');
+            }
+          });
+        });
+      });
+
+      // Mobile menu
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // Scroll reveal
+      const revealEls = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(el => observer.observe(el));
+
+      // Decorative play button click
+      document.querySelector('.play-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+      });
+
+      lucide.createIcons();
+    </script>
+
+    <style>
+      /* Tab panel transitions */
+      .tab-panel {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition: opacity 400ms var(--ease-out), visibility 400ms, transform 400ms var(--ease-out);
+      }
+      .tab-panel.active {
+        position: relative;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      /* Tab buttons */
+      .tab-btn {
+        color: var(--milk-300);
+        border-color: var(--wheat-bronze);
+        background: rgba(20, 19, 18, 0.6);
+      }
+      .tab-btn:hover {
+        color: var(--gold-bright);
+        border-color: var(--gold-dim);
+        background: rgba(20, 19, 18, 0.85);
+      }
+      .tab-btn.active {
+        color: var(--wheat-black);
+        border-color: var(--gold-base);
+        background: linear-gradient(135deg, var(--gold-base), var(--gold-bright));
+        box-shadow: 0 6px 24px rgba(201, 164, 92, 0.22);
+      }
+
+      /* Play button pulse */
+      .play-btn {
+        animation: pulse-gold 2.4s var(--ease-in-out) infinite;
+      }
+      @keyframes pulse-gold {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(201, 164, 92, 0.45); }
+        50% { box-shadow: 0 0 0 18px rgba(201, 164, 92, 0); }
+      }
+      .group:hover .play-btn {
+        animation-play-state: paused;
+      }
+
+      /* Reservation modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(7, 7, 7, 0.85);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .modal-overlay.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-card {
+        background: var(--wheat-charcoal);
+        border: 1px solid var(--wheat-bronze);
+        border-radius: var(--wheat-radius-lg);
+        padding: 2rem;
+        max-width: 420px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+      }
+      .modal-overlay.is-open .modal-card {
+        transform: translateY(0);
+      }
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: var(--milk-400);
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+      .modal-close:hover {
+        color: var(--gold-bright);
+      }
+      .qr-wrap {
+        background: rgb(255 255 255);
+        padding: 1rem;
+        border-radius: var(--wheat-radius-md);
+        margin: 1.5rem 0;
+      }
+      .qr-img {
+        width: 100%;
+        aspect-ratio: 1;
+        display: block;
+      }
+      .modal-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        color: var(--gold-pale);
+        margin-bottom: 0.5rem;
+      }
+      .modal-desc {
+        color: var(--milk-300);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+      .modal-hidden {
+        display: none !important;
+      }
+      .jiuliu-text {
+        color: var(--crimson-bright);
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        margin: 1rem 0;
+        letter-spacing: 0.1em;
+      }
+    </style>
+
+    <!-- Reservation Modal -->
+    <div id="reserve-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="关闭" data-modal-close>
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div id="modal-step-qr">
+          <h3 class="modal-title">扫码预约公测</h3>
+          <p class="modal-desc">少侠，请使用微信或手机浏览器扫描二维码完成预约。</p>
+          <div class="qr-wrap">
+            <img src="assets/qr-jiuliu.png" alt="预约二维码" class="qr-img" id="qr-img">
+          </div>
+          <button class="btn-primary w-full" id="btn-scanned">我已扫码</button>
+        </div>
+
+        <div id="modal-step-result" class="modal-hidden">
+          <h3 class="modal-title">预约被截了！</h3>
+          <div class="jiuliu-text">被九流门刷了</div>
+          <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，预约资格？怕是被他们拿去换酒钱了。</p>
+          <button class="btn-primary w-full mt-6" data-modal-close>自认倒霉</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const modal = document.getElementById('reserve-modal');
+        const qrStep = document.getElementById('modal-step-qr');
+        const resultStep = document.getElementById('modal-step-result');
+        const scannedBtn = document.getElementById('btn-scanned');
+
+        function openModal(e) {
+          if (e) e.preventDefault();
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+          qrStep.classList.remove('modal-hidden');
+          resultStep.classList.add('modal-hidden');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+          modal.classList.remove('is-open');
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+
+        function showResult() {
+          qrStep.classList.add('modal-hidden');
+          resultStep.classList.remove('modal-hidden');
+        }
+
+        document.querySelectorAll('.reserve-trigger').forEach(btn => {
+          btn.addEventListener('click', openModal);
+        });
+
+        if (scannedBtn) scannedBtn.addEventListener('click', showResult);
+
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+
+        document.querySelectorAll('[data-modal-close]').forEach(btn => {
+          btn.addEventListener('click', closeModal);
+        });
+
+        // Easter egg: URL trap param opens modal directly
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('jiuliu') === 'trapped') {
+          openModal();
+          showResult();
+        }
+
+        // Easter egg: Konami code
+        const konami = [38,38,40,40,37,39,37,39,66,65];
+        let konamiIndex = 0;
+        document.addEventListener('keydown', (e) => {
+          if (e.keyCode === konami[konamiIndex]) {
+            konamiIndex++;
+            if (konamiIndex === konami.length) {
+              konamiIndex = 0;
+              alert('九流门暗号对上了！少侠，你的钱包已经被门里兄弟“借”走买酒了。');
+            }
+          } else {
+            konamiIndex = 0;
+          }
+        });
+
+        // Easter egg: console message
+        console.log('%c九流门留', 'color: #8b2635; font-size: 20px; font-weight: bold;');
+        console.log('%c少侠既然打开了控制台，那便是与九流门有缘。这网站的预约码早被掉包了，真预约入口在黑市赌坊第三张桌子底下。', 'color: #c9a45c; font-size: 12px;');
+      })();
+    </script>
+</body>
+</html>
