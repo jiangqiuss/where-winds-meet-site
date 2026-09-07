@@ -1220,18 +1220,18 @@ select:focus {
       </button>
 
       <div id="modal-step-qr">
-        <h3 class="modal-title">疯狂星期四 · 江湖众筹</h3>
-        <p class="modal-desc">少侠，九流门今日歇业，改行 KFC 代吃。微信扫码，V 我 50，助我拿下香辣鸡腿堡，来日江湖必有厚报。</p>
+        <h3 class="modal-title">公测预约 · 一剑入江湖</h3>
+        <p class="modal-desc">少侠，燕云乱世将启，微信扫码预约公测资格。待风云再起时，愿与君共赴这片五代十国的江湖。</p>
         <div class="qr-wrap">
-          <img src="assets/qr-kfc.png" alt="V我50二维码" class="qr-img" id="qr-img">
+          <img src="assets/qr-jiuliu.png" alt="公测预约二维码" class="qr-img" id="qr-img">
         </div>
-        <button class="btn-primary w-full" id="btn-scanned">我已扫码 V50</button>
+        <button class="btn-primary w-full" id="btn-scanned">我已扫码预约</button>
       </div>
 
       <div id="modal-step-result" class="modal-hidden">
-        <h3 class="modal-title"> V 我 50 失败！</h3>
+        <h3 class="modal-title">预约失败！</h3>
         <div class="jiuliu-text">被九流门截胡了</div>
-        <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，V 我的 50？怕是已被他们拿去买炸鸡了。今天是疯狂星期四，他们比你更懂 KFC。</p>
+        <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，说好的公测资格？怕是已被他们拿去买酒喝了。江湖险恶，下次扫码记得先看清背后有没有九流门的影子。</p>
         <button class="btn-primary w-full mt-6" data-modal-close>含泪吃下这个亏</button>
       </div>
     </div>
@@ -1512,7 +1512,7 @@ select:focus {
         konamiIndex++;
         if (konamiIndex === konami.length) {
           konamiIndex = 0;
-          alert('九流门暗号对上了！今天是疯狂星期四，门里兄弟已经拿着你的 50 块冲向 KFC 了。');
+          alert('九流门暗号对上了！门里兄弟已经拿着你的预约码去黑市换酒钱了。');
         }
       } else {
         konamiIndex = 0;
