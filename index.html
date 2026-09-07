@@ -480,6 +480,7 @@ select:focus {
     }
     .faction-panel { display: none; }
     .faction-panel.is-active { display: block; animation: fadeIn 0.5s var(--ease-out); }
+    .faction-card { cursor: pointer; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -591,49 +592,117 @@ select:focus {
 
         <!-- Horizontal scrollable faction carousel -->
         <div class="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-8 mb-10 reveal">
-          <div class="snap-center shrink-0 w-72 h-96 card flex flex-col justify-end p-6 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-ink)]/70 to-transparent">
-            <span class="text-caption mb-2">TIAN QUAN</span>
-            <h3 class="text-section text-3xl">天泉</h3>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="tianquan">
+            <img src="assets/tianquan.jpg" alt="天泉" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">TIAN QUAN</span>
+              <h3 class="text-section text-3xl">天泉</h3>
+            </div>
           </div>
-          <div class="snap-center shrink-0 w-72 h-96 card flex flex-col justify-end p-6 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-ink)]/70 to-transparent">
-            <span class="text-caption mb-2">KUANG LAN</span>
-            <h3 class="text-section text-3xl">狂澜</h3>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="kuanglan">
+            <img src="assets/kuanglan.jpg" alt="狂澜" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">KUANG LAN</span>
+              <h3 class="text-section text-3xl">狂澜</h3>
+            </div>
           </div>
-          <div class="snap-center shrink-0 w-72 h-96 card flex flex-col justify-end p-6 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-ink)]/70 to-transparent">
-            <span class="text-caption mb-2">SAN GENG TIAN</span>
-            <h3 class="text-section text-3xl">三更天</h3>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="sangengtian">
+            <img src="assets/sangengtian.jpg" alt="三更天" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">SAN GENG TIAN</span>
+              <h3 class="text-section text-3xl">三更天</h3>
+            </div>
           </div>
-          <div class="snap-center shrink-0 w-72 h-96 card flex flex-col justify-end p-6 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-ink)]/70 to-transparent">
-            <span class="text-caption mb-2">JIU LIU MEN</span>
-            <h3 class="text-section text-3xl">九流门</h3>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="jiuliumen">
+            <img src="assets/jiuliumen.jpg" alt="九流门" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">JIU LIU MEN</span>
+              <h3 class="text-section text-3xl">九流门</h3>
+            </div>
+          </div>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="qingxi">
+            <img src="assets/qingxi.jpg" alt="清溪" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">QING XI</span>
+              <h3 class="text-section text-3xl">清溪</h3>
+            </div>
+          </div>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="zuihuayin">
+            <img src="assets/zuihuayin.jpg" alt="醉花阴" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">ZUI HUA YIN</span>
+              <h3 class="text-section text-3xl">醉花阴</h3>
+            </div>
+          </div>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="guyun">
+            <img src="assets/guyun.jpg" alt="孤云" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">GU YUN</span>
+              <h3 class="text-section text-3xl">孤云</h3>
+            </div>
+          </div>
+          <div class="snap-center shrink-0 w-72 h-[480px] card faction-card relative overflow-hidden group" data-target="wuxingu">
+            <img src="assets/wuxingu.jpg" alt="无心谷" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/50 to-transparent"></div>
+            <div class="relative z-10 flex flex-col justify-end h-full p-6">
+              <span class="text-caption mb-2">WU XIN GU</span>
+              <h3 class="text-section text-3xl">无心谷</h3>
+            </div>
           </div>
         </div>
 
         <!-- Faction tabs -->
-        <div class="flex flex-wrap justify-center gap-4 mb-8 reveal" role="tablist" aria-label="门派选择">
+        <div class="flex flex-wrap justify-center gap-3 mb-8 reveal" role="tablist" aria-label="门派选择">
           <button type="button" data-dom-id="faction-tab-tianquan" class="faction-tab btn-outline active" role="tab" aria-selected="true" data-target="tianquan">天泉</button>
           <button type="button" data-dom-id="faction-tab-kuanglan" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="kuanglan">狂澜</button>
           <button type="button" data-dom-id="faction-tab-sangengtian" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="sangengtian">三更天</button>
           <button type="button" data-dom-id="faction-tab-jiuliumen" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="jiuliumen">九流门</button>
+          <button type="button" data-dom-id="faction-tab-qingxi" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="qingxi">清溪</button>
+          <button type="button" data-dom-id="faction-tab-zuihuayin" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="zuihuayin">醉花阴</button>
+          <button type="button" data-dom-id="faction-tab-guyun" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="guyun">孤云</button>
+          <button type="button" data-dom-id="faction-tab-wuxingu" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="wuxingu">无心谷</button>
         </div>
 
         <!-- Description panel -->
         <div class="card max-w-3xl mx-auto p-8 lg:p-10 reveal">
           <div id="faction-panel-tianquan" class="faction-panel is-active">
             <h3 class="text-subhead mb-3">天泉 · 正道魁首</h3>
-            <p class="text-body-lg">天泉派承袭浩然正气，弟子皆以“济世安民”为己任。剑法大开大合，招式之间可见山河气象，是乱世中最为百姓所倚重的正道栋梁。</p>
+            <p class="text-body-lg">天泉派承袭浩然正气，弟子皆以“济世安民”为己任。重剑金甲，招式之间可见山河气象，是乱世中最为百姓所倚重的正道栋梁。</p>
           </div>
           <div id="faction-panel-kuanglan" class="faction-panel">
             <h3 class="text-subhead mb-3">狂澜 · 江海不羁</h3>
-            <p class="text-body-lg">狂澜一门居无定所，往来于江河湖海之间。他们崇尚自由，刀法如惊涛拍岸，既有江湖儿女的豪情，也藏着不为人知的孤勇。</p>
+            <p class="text-body-lg">狂澜一门居无定所，往来于江河湖海之间。双刀如惊涛拍岸，崇尚自由，既有江湖儿女的豪情，也藏着不为人知的孤勇。</p>
           </div>
           <div id="faction-panel-sangengtian" class="faction-panel">
             <h3 class="text-subhead mb-3">三更天 · 暗夜行者</h3>
-            <p class="text-body-lg">三更天潜行于夜色之中，以迅疾诡谲的身法闻名。他们不问善恶，只奉令而行，是乱世阴影里最锋利的一把匕首。</p>
+            <p class="text-body-lg">三更天潜行于夜色之中，以迅疾诡谲的身法闻名。黑衣匕首，不问善恶，只奉令而行，是乱世阴影里最锋利的一把刀。</p>
           </div>
           <div id="faction-panel-jiuliumen" class="faction-panel">
             <h3 class="text-subhead mb-3">九流门 · 市井百态</h3>
-            <p class="text-body-lg">九流门汇聚三教九流，门人各有所长。他们以市井为根基，消息灵通，手段百变，能在庙堂与江湖之间走出一条独特的路。</p>
+            <p class="text-body-lg">九流门汇聚三教九流，门人各有所长。以市井为根基，消息灵通，手段百变，能在庙堂与江湖之间走出一条独特的路。</p>
+          </div>
+          <div id="faction-panel-qingxi" class="faction-panel">
+            <h3 class="text-subhead mb-3">清溪 · 医毒双绝</h3>
+            <p class="text-body-lg">清溪隐于竹林溪畔，门下弟子精通医毒两道。一手救人，一手制敌，生死之间只在一念，是乱世中最难捉摸的存在。</p>
+          </div>
+          <div id="faction-panel-zuihuayin" class="faction-panel">
+            <h3 class="text-subhead mb-3">醉花阴 · 花间双剑</h3>
+            <p class="text-body-lg">醉花阴以舞入武，双剑翩若惊鸿。她们藏身于花柳繁华之地，一笑倾城，一剑封喉，是江湖中最艳丽的杀机。</p>
+          </div>
+          <div id="faction-panel-guyun" class="faction-panel">
+            <h3 class="text-subhead mb-3">孤云 · 剑心通明</h3>
+            <p class="text-body-lg">孤云弟子白衣胜雪，独来独往，剑心通明。他们不问红尘事，只问手中剑，御风而行，是江湖传说中最清冷的一道影子。</p>
+          </div>
+          <div id="faction-panel-wuxingu" class="faction-panel">
+            <h3 class="text-subhead mb-3">无心谷 · 机关傀儡</h3>
+            <p class="text-body-lg">无心谷深藏于幽谷之中，门人擅机关傀儡之术。他们以丝线控生死，以匠心铸杀器，心外无物，唯机关永恒。</p>
           </div>
         </div>
       </div>
@@ -827,19 +896,29 @@ select:focus {
 
     // Faction tabs
     const factionTabs = document.querySelectorAll('.faction-tab');
-    factionTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.target;
-        factionTabs.forEach(t => {
-          t.classList.remove('active');
-          t.setAttribute('aria-selected', 'false');
-        });
-        tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
-        document.querySelectorAll('.faction-panel').forEach(panel => panel.classList.remove('is-active'));
-        const activePanel = document.getElementById('faction-panel-' + target);
-        if (activePanel) activePanel.classList.add('is-active');
+    const factionPanels = document.querySelectorAll('.faction-panel');
+    const factionCards = document.querySelectorAll('.faction-card');
+
+    function activateFaction(target) {
+      factionTabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+        if (t.dataset.target === target) {
+          t.classList.add('active');
+          t.setAttribute('aria-selected', 'true');
+        }
       });
+      factionPanels.forEach(panel => panel.classList.remove('is-active'));
+      const activePanel = document.getElementById('faction-panel-' + target);
+      if (activePanel) activePanel.classList.add('is-active');
+    }
+
+    factionTabs.forEach(tab => {
+      tab.addEventListener('click', () => activateFaction(tab.dataset.target));
+    });
+
+    factionCards.forEach(card => {
+      card.addEventListener('click', () => activateFaction(card.dataset.target));
     });
 
     // Reservation modal
