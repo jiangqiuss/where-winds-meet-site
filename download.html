@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>公测预约</title>
+    <title>公测预约 · 燕云十六声</title>
     <style id="theme-vars">
 :root {
   /* Brand palette — 暗金史诗 */
@@ -108,6 +108,7 @@
 /* Global surface */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 72px;
   background: var(--wheat-background);
   color: var(--wheat-foreground);
 }
@@ -312,6 +313,67 @@ select:focus {
   border-radius: var(--wheat-radius-full);
 }
 
+/* Chinese-style texture overlay */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Corner flourish for cards */
+.corner-flourish {
+  position: relative;
+}
+.corner-flourish::before,
+.corner-flourish::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--gold-muted);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: all 0.35s var(--ease-out);
+}
+.corner-flourish::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: var(--wheat-radius-lg);
+}
+.corner-flourish::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: var(--wheat-radius-lg);
+}
+.corner-flourish:hover::before,
+.corner-flourish:hover::after {
+  width: 28px;
+  height: 28px;
+  border-color: var(--gold-base);
+  opacity: 0.85;
+}
+
+/* Ink wash edge gradient */
+.ink-edge {
+  position: relative;
+}
+.ink-edge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(7,7,7,0.55) 100%);
+  z-index: 1;
+}
+
 /* Scroll reveal */
 .reveal {
   opacity: 0;
@@ -349,6 +411,103 @@ select:focus {
   background: var(--gold-dim);
 }
 
+/* Floating embers */
+.ember {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, var(--gold-bright), transparent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: rise 8s infinite ease-in;
+}
+@keyframes rise {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  20% { opacity: 0.7; }
+  80% { opacity: 0.4; }
+  100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+
+/* Animated gold divider */
+.divider-animated {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-base), var(--gold-pale), var(--gold-base), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Section badge & title decoration */
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--gold-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.section-badge::before,
+.section-badge::after {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--gold-dim);
+}
+.section-title-deco {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: var(--gold-muted);
+  vertical-align: middle;
+  margin: 0 1rem;
+  opacity: 0.5;
+  position: relative;
+}
+.section-title-deco::before,
+.section-title-deco::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--gold-muted);
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+.section-title-deco::before { left: -3px; border-right: none; border-bottom: none; }
+.section-title-deco::after { right: -3px; border-left: none; border-top: none; }
+
+/* Nav active indicator */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%) scaleX(0);
+  width: 18px;
+  height: 2px;
+  background: var(--gold-base);
+  border-radius: 2px;
+  transition: transform 0.25s var(--ease-out);
+}
+.nav-link.active {
+  color: var(--gold-bright);
+}
+.nav-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ember, .divider-animated, .reveal { animation: none; transition: none; }
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
     <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
@@ -448,345 +607,381 @@ select:focus {
       }
     </style>
 </head>
-<body class="min-h-screen font-sans antialiased">
-    <header class="sticky top-0 z-50 border-b border-[var(--wheat-bronze)] bg-[var(--wheat-void)]/95 backdrop-blur">
-      <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="index.html" class="font-display text-xl tracking-widest text-[var(--gold-pale)]">燕云十六声</a>
-        <ul class="hidden items-center gap-8 text-sm md:flex">
-          <li><a href="index.html" data-dom-id="nav-index" class="text-[var(--milk-300)] hover:text-[var(--gold-bright)]">首页</a></li>
-          <li><a href="world.html" data-dom-id="nav-world" class="text-[var(--milk-300)] hover:text-[var(--gold-bright)]">江湖</a></li>
-          <li><a href="gameplay.html" data-dom-id="nav-gameplay" class="text-[var(--milk-300)] hover:text-[var(--gold-bright)]">玩法</a></li>
-          <li><a href="download.html" data-dom-id="nav-download" class="text-[var(--gold-bright)]">预约</a></li>
-        </ul>
-        <a href="#reserve-form" class="btn-primary py-2 px-5 text-sm">立即预约</a>
-      </nav>
-    </header>
+<body class="min-h-screen font-sans antialiased overflow-x-hidden">
+  <!-- Paper grain texture -->
+  <div class="paper-grain" aria-hidden="true"></div>
 
-    <main>
-      <section class="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('assets/download-hero.jpg');"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-[var(--wheat-void)]/70 via-[var(--wheat-void)]/50 to-[var(--wheat-void)]"></div>
-        <div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <p class="mb-4 text-caption">WHERE WINDS MEET · 公测将至</p>
-          <h1 class="text-hero mb-6">公测预约</h1>
-          <p class="text-body-lg mb-10">预约即赠限定外观 · 乱世风云一剑开</p>
+  <!-- Floating embers -->
+  <div class="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+    <span class="ember" style="left:8%;bottom:-5%;animation-duration:7s;animation-delay:0s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:15%;bottom:-5%;animation-duration:9s;animation-delay:1.2s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:22%;bottom:-5%;animation-duration:8s;animation-delay:2.5s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:30%;bottom:-5%;animation-duration:10s;animation-delay:0.8s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:38%;bottom:-5%;animation-duration:7.5s;animation-delay:3.1s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:45%;bottom:-5%;animation-duration:9.5s;animation-delay:1.6s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:52%;bottom:-5%;animation-duration:8.2s;animation-delay:2.2s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:60%;bottom:-5%;animation-duration:11s;animation-delay:0.3s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:68%;bottom:-5%;animation-duration:7.8s;animation-delay:4s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:75%;bottom:-5%;animation-duration:9s;animation-delay:1s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:82%;bottom:-5%;animation-duration:8.6s;animation-delay:3.5s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:90%;bottom:-5%;animation-duration:10.2s;animation-delay:2.8s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:12%;bottom:-5%;animation-duration:6.5s;animation-delay:5s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:28%;bottom:-5%;animation-duration:9.8s;animation-delay:4.2s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:48%;bottom:-5%;animation-duration:7.2s;animation-delay:5.5s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:63%;bottom:-5%;animation-duration:10.5s;animation-delay:3.8s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:78%;bottom:-5%;animation-duration:8.8s;animation-delay:6s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:5%;bottom:-5%;animation-duration:9.2s;animation-delay:2s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:55%;bottom:-5%;animation-duration:6.8s;animation-delay:6.5s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:95%;bottom:-5%;animation-duration:11.5s;animation-delay:1.8s;width:4px;height:4px;"></span>
+  </div>
 
-          <div data-dom-id="countdown-timer" class="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <div class="card p-5 text-center">
-              <span id="cd-days" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
-              <span class="text-xs tracking-widest text-[var(--milk-500)]">天</span>
-            </div>
-            <div class="card p-5 text-center">
-              <span id="cd-hours" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
-              <span class="text-xs tracking-widest text-[var(--milk-500)]">时</span>
-            </div>
-            <div class="card p-5 text-center">
-              <span id="cd-minutes" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
-              <span class="text-xs tracking-widest text-[var(--milk-500)]">分</span>
-            </div>
-            <div class="card p-5 text-center">
-              <span id="cd-seconds" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
-              <span class="text-xs tracking-widest text-[var(--milk-500)]">秒</span>
-            </div>
+  <!-- Sticky Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-[72px] bg-[var(--wheat-void)]/85 backdrop-blur-md border-b border-[var(--wheat-bronze)]/60">
+    <nav class="mx-auto max-w-7xl px-6 h-full flex items-center justify-between" aria-label="主导航">
+      <a href="index.html" class="font-display text-2xl tracking-[0.12em] text-[var(--gold-pale)] hover:text-[var(--gold-bright)] transition-colors">燕云十六声</a>
+      <ul class="hidden md:flex items-center gap-10">
+        <li><a href="index.html" data-dom-id="nav-index" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">首页</a></li>
+        <li><a href="world.html" data-dom-id="nav-world" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">乱世燕云</a></li>
+        <li><a href="gameplay.html" data-dom-id="nav-gameplay" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">江湖百艺</a></li>
+        <li><a href="download.html" data-dom-id="nav-download" class="nav-link active text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">公测预约</a></li>
+      </ul>
+      <a href="#reserve-form" class="hidden sm:inline-flex btn-primary py-2 px-5 text-sm">立即预约</a>
+      <button type="button" class="md:hidden text-[var(--gold-base)]" aria-label="打开菜单">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="relative flex min-h-screen items-center justify-center overflow-hidden ink-edge">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('assets/download-hero.jpg');"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[var(--wheat-void)]/70 via-[var(--wheat-void)]/50 to-[var(--wheat-void)]"></div>
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(201,164,92,0.12), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(139,38,53,0.15), transparent 45%);"></div>
+      <div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <div class="flex items-center justify-center gap-4 mb-6 reveal">
+          <span class="section-title-deco"></span>
+          <p class="text-caption m-0">WHERE WINDS MEET · 公测将至</p>
+          <span class="section-title-deco"></span>
+        </div>
+        <h1 class="text-hero mb-6 reveal">公测预约</h1>
+        <p class="text-subhead mb-10 reveal">预约即赠限定外观 · 乱世风云一剑开</p>
+
+        <div data-dom-id="countdown-timer" class="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4 reveal">
+          <div class="card corner-flourish p-5 text-center">
+            <span id="cd-days" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+            <span class="text-xs tracking-widest text-[var(--milk-500)]">天</span>
           </div>
-
-          <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="#reserve-form" class="btn-primary w-full sm:w-auto">立即预约</a>
-            <a href="#platforms" class="btn-outline w-full sm:w-auto">选择平台</a>
+          <div class="card corner-flourish p-5 text-center">
+            <span id="cd-hours" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+            <span class="text-xs tracking-widest text-[var(--milk-500)]">时</span>
+          </div>
+          <div class="card corner-flourish p-5 text-center">
+            <span id="cd-minutes" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+            <span class="text-xs tracking-widest text-[var(--milk-500)]">分</span>
+          </div>
+          <div class="card corner-flourish p-5 text-center">
+            <span id="cd-seconds" class="block font-display text-4xl text-[var(--gold-pale)]">00</span>
+            <span class="text-xs tracking-widest text-[var(--milk-500)]">秒</span>
           </div>
         </div>
-      </section>
 
-      <section id="platforms" class="section-charcoal py-20">
-        <div class="mx-auto max-w-6xl px-6">
-          <div class="mb-12 text-center reveal">
-            <p class="text-caption mb-3">PLATFORM</p>
-            <h2 class="text-section mb-4">选择你的江湖入口</h2>
-            <div class="divider-gold mx-auto"></div>
-          </div>
-
-          <div class="grid gap-6 md:grid-cols-3">
-            <article class="card platform-card p-8 text-center reveal hover:shadow-[0_0_30px_rgba(201,164,92,0.35)]">
-              <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
-                <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                  <line x1="8" y1="21" x2="16" y2="21"></line>
-                  <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-              </div>
-              <h3 class="text-subhead mb-2">PC 客户端</h3>
-              <p class="text-body mb-6">Windows 10 / 11 · 推荐 RTX 3060 及以上</p>
-              <a href="#reserve-form" data-dom-id="cta-download-pc" class="btn-primary w-full">下载客户端</a>
-            </article>
-
-            <article class="card platform-card p-8 text-center reveal hover:shadow-[0_0_30px_rgba(201,164,92,0.35)]">
-              <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
-                <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="6" y="2" width="12" height="20" rx="3"></rect>
-                  <line x1="10" y1="18" x2="14" y2="18"></line>
-                </svg>
-              </div>
-              <h3 class="text-subhead mb-2">iOS</h3>
-              <p class="text-body mb-6">App Store · iPhone 12 及以上机型</p>
-              <a href="#reserve-form" data-dom-id="cta-download-ios" class="btn-primary w-full">下载客户端</a>
-            </article>
-
-            <article class="card platform-card p-8 text-center reveal hover:shadow-[0_0_30px_rgba(201,164,92,0.35)]">
-              <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
-                <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="5" y="2" width="14" height="20" rx="2"></rect>
-                  <path d="M12 18h.01"></path>
-                </svg>
-              </div>
-              <h3 class="text-subhead mb-2">Android</h3>
-              <p class="text-body mb-6">各大应用商店 · Android 10 及以上</p>
-              <a href="#reserve-form" data-dom-id="cta-download-mobile" class="btn-primary w-full">下载客户端</a>
-            </article>
-          </div>
+        <div class="flex flex-col items-center justify-center gap-4 sm:flex-row reveal">
+          <a href="#reserve-form" class="btn-primary w-full sm:w-auto">立即预约</a>
+          <a href="#platforms" class="btn-outline w-full sm:w-auto">选择平台</a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="reserve-form" class="section-dark py-20">
-        <div class="mx-auto max-w-2xl px-6">
-          <div class="mb-10 text-center reveal">
-            <p class="text-caption mb-3">RESERVATION</p>
-            <h2 class="text-section mb-4">立即预约</h2>
-            <div class="divider-gold mx-auto mb-6"></div>
-            <p class="text-body">填写信息，公测开启后第一时间踏入江湖。</p>
-          </div>
-
-          <form data-dom-id="form-reserve" class="card p-8 reveal" novalidate>
-            <div class="space-y-5">
-              <div>
-                <label class="mb-2 block text-sm text-[var(--milk-200)]" for="phone">手机号码</label>
-                <input id="phone" name="phone" type="tel" placeholder="请输入 11 位手机号" class="w-full" required>
-                <p id="phone-error" class="mt-2 hidden text-sm text-[var(--state-error)]">请输入有效的手机号码</p>
-              </div>
-
-              <div>
-                <label class="mb-2 block text-sm text-[var(--milk-200)]" for="code">验证码</label>
-                <div class="flex gap-3">
-                  <input id="code" name="code" type="text" maxlength="6" placeholder="请输入验证码" class="flex-1" required>
-                  <button type="button" id="send-code" class="btn-outline whitespace-nowrap px-4">获取验证码</button>
-                </div>
-              </div>
-
-              <div>
-                <label class="mb-2 block text-sm text-[var(--milk-200)]" for="platform">平台选择</label>
-                <select id="platform" name="platform" class="w-full" required>
-                  <option value="">请选择预约平台</option>
-                  <option value="pc">PC</option>
-                  <option value="ios">iOS</option>
-                  <option value="android">Android</option>
-                </select>
-              </div>
-
-              <label class="flex cursor-pointer items-start gap-3">
-                <input id="agree" name="agree" type="checkbox" class="mt-1 h-4 w-4 accent-[var(--gold-base)]" required>
-                <span class="text-sm text-[var(--milk-400)]">我已阅读并同意<a href="#" class="underline decoration-[var(--gold-dim)] underline-offset-4">《用户服务协议》</a>与<a href="#" class="underline decoration-[var(--gold-dim)] underline-offset-4">《隐私政策》</a></span>
-              </label>
-            </div>
-
-            <button data-dom-id="submit-reserve" type="submit" class="btn-primary mt-8 w-full">确认预约</button>
-
-            <div id="reserve-success" class="mt-6 hidden rounded-lg border border-[var(--state-success)] bg-[var(--state-success)]/10 p-4 text-center text-[var(--milk-100)]">
-              <p class="font-semibold">预约成功</p>
-              <p class="mt-1 text-sm text-[var(--milk-300)]">乱世风云，待君一剑开之。</p>
-            </div>
-          </form>
+    <section id="platforms" class="section-charcoal py-24 lg:py-32">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="mb-16 text-center reveal">
+          <div class="section-badge justify-center">PLATFORM</div>
+          <h2 class="text-section mb-5">选择你的江湖入口</h2>
+          <div class="divider-gold mx-auto divider-animated"></div>
         </div>
-      </section>
 
-      <section class="section-charcoal py-20">
-        <div class="mx-auto max-w-4xl px-6">
-          <div class="mb-12 text-center reveal">
-            <p class="text-caption mb-3">REWARDS</p>
-            <h2 class="text-section mb-4">预约里程碑奖励</h2>
-            <div class="divider-gold mx-auto mb-6"></div>
-            <p class="text-body">集结乱世英豪，解锁全服限定好礼。</p>
-          </div>
-
-          <div class="mb-10 reveal">
-            <div class="mb-2 flex justify-between text-sm">
-              <span class="text-[var(--milk-200)]">当前预约人数</span>
-              <span class="font-display text-[var(--gold-pale)]">235 万 / 500 万</span>
-            </div>
-            <div class="h-3 w-full overflow-hidden rounded-full bg-[var(--wheat-stone)]">
-              <div id="reward-progress" class="h-full rounded-full bg-gradient-to-r from-[var(--gold-muted)] via-[var(--gold-base)] to-[var(--gold-bright)]" style="width: 0%;" data-width="47%"></div>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <div class="card flex items-center gap-5 p-5 reveal">
-              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--crimson-deep)] text-[var(--gold-pale)] font-display">50万</div>
-              <div>
-                <h4 class="text-subhead mb-1">铜钱 × 88888</h4>
-                <p class="text-sm text-[var(--milk-500)]">行走江湖，盘缠先行</p>
-              </div>
-              <span class="ml-auto text-xs text-[var(--state-success)]">已解锁</span>
-            </div>
-            <div class="card flex items-center gap-5 p-5 reveal">
-              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--crimson-deep)] text-[var(--gold-pale)] font-display">100万</div>
-              <div>
-                <h4 class="text-subhead mb-1">限定外观 · 苍云游侠</h4>
-                <p class="text-sm text-[var(--milk-500)]">一袭白衣，入世出尘</p>
-              </div>
-              <span class="ml-auto text-xs text-[var(--state-success)]">已解锁</span>
-            </div>
-            <div class="card flex items-center gap-5 p-5 reveal">
-              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--wheat-bronze)] text-[var(--gold-pale)] font-display">200万</div>
-              <div>
-                <h4 class="text-subhead mb-1">坐骑 · 墨羽惊风</h4>
-                <p class="text-sm text-[var(--milk-500)]">日行千里，踏遍河山</p>
-              </div>
-              <span class="ml-auto text-xs text-[var(--gold-bright)]">即将解锁</span>
-            </div>
-            <div class="card flex items-center gap-5 p-5 reveal">
-              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--wheat-bronze)] text-[var(--gold-pale)] font-display">500万</div>
-              <div>
-                <h4 class="text-subhead mb-1">限定称号 · 乱世开山人</h4>
-                <p class="text-sm text-[var(--milk-500)]">一剑开天，留名青史</p>
-              </div>
-              <span class="ml-auto text-xs text-[var(--milk-500)]">未解锁</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-dark py-20">
-        <div class="mx-auto max-w-5xl px-6 text-center">
-          <div class="mb-12 reveal">
-            <p class="text-caption mb-3">COMMUNITY</p>
-            <h2 class="text-section mb-4">关注官方社区</h2>
-            <div class="divider-gold mx-auto"></div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
-              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        <div class="grid gap-6 md:grid-cols-3">
+          <article class="card corner-flourish platform-card p-8 text-center reveal">
+            <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
+              <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
               </svg>
-              <span class="text-sm text-[var(--milk-200)]">官方微博</span>
-            </a>
-            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
-              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                <rect x="1" y="5" width="15" height="14" rx="2"></rect>
+            </div>
+            <h3 class="text-subhead mb-2">PC 客户端</h3>
+            <p class="text-body mb-6">Windows 10 / 11 · 推荐 RTX 3060 及以上</p>
+            <a href="#reserve-form" data-dom-id="cta-download-pc" class="btn-primary w-full">下载客户端</a>
+          </article>
+
+          <article class="card corner-flourish platform-card p-8 text-center reveal">
+            <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
+              <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="2" width="12" height="20" rx="3"></rect>
+                <line x1="10" y1="18" x2="14" y2="18"></line>
               </svg>
-              <span class="text-sm text-[var(--milk-200)]">B站</span>
-            </a>
-            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
-              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </div>
+            <h3 class="text-subhead mb-2">iOS</h3>
+            <p class="text-body mb-6">App Store · iPhone 12 及以上机型</p>
+            <a href="#reserve-form" data-dom-id="cta-download-ios" class="btn-primary w-full">下载客户端</a>
+          </article>
+
+          <article class="card corner-flourish platform-card p-8 text-center reveal">
+            <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--gold-dim)] bg-[var(--wheat-stone)]">
+              <svg viewBox="0 0 24 24" class="h-8 w-8 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                <path d="M12 18h.01"></path>
               </svg>
-              <span class="text-sm text-[var(--milk-200)]">微信公众号</span>
-            </a>
-            <a href="#" class="card community-link flex flex-col items-center gap-3 p-6 reveal">
-              <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              <span class="text-sm text-[var(--milk-200)]">Discord</span>
-            </a>
+            </div>
+            <h3 class="text-subhead mb-2">Android</h3>
+            <p class="text-body mb-6">各大应用商店 · Android 10 及以上</p>
+            <a href="#reserve-form" data-dom-id="cta-download-mobile" class="btn-primary w-full">下载客户端</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="reserve-form" class="section-dark py-24 lg:py-32">
+      <div class="mx-auto max-w-2xl px-6">
+        <div class="mb-12 text-center reveal">
+          <div class="section-badge justify-center">RESERVATION</div>
+          <h2 class="text-section mb-5">立即预约</h2>
+          <div class="divider-gold mx-auto divider-animated mb-6"></div>
+          <p class="text-body">填写信息，公测开启后第一时间踏入江湖。</p>
+        </div>
+
+        <form data-dom-id="form-reserve" class="card corner-flourish p-8 reveal" novalidate>
+          <div class="space-y-5">
+            <div>
+              <label class="mb-2 block text-sm text-[var(--milk-200)]" for="phone">手机号码</label>
+              <input id="phone" name="phone" type="tel" placeholder="请输入 11 位手机号" class="w-full" required>
+              <p id="phone-error" class="mt-2 hidden text-sm text-[var(--state-error)]">请输入有效的手机号码</p>
+            </div>
+
+            <div>
+              <label class="mb-2 block text-sm text-[var(--milk-200)]" for="code">验证码</label>
+              <div class="flex gap-3">
+                <input id="code" name="code" type="text" maxlength="6" placeholder="请输入验证码" class="flex-1" required>
+                <button type="button" id="send-code" class="btn-outline whitespace-nowrap px-4">获取验证码</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="mb-2 block text-sm text-[var(--milk-200)]" for="platform">平台选择</label>
+              <select id="platform" name="platform" class="w-full" required>
+                <option value="">请选择预约平台</option>
+                <option value="pc">PC</option>
+                <option value="ios">iOS</option>
+                <option value="android">Android</option>
+              </select>
+            </div>
+
+            <label class="flex cursor-pointer items-start gap-3">
+              <input id="agree" name="agree" type="checkbox" class="mt-1 h-4 w-4 accent-[var(--gold-base)]" required>
+              <span class="text-sm text-[var(--milk-400)]">我已阅读并同意<a href="#" class="underline decoration-[var(--gold-dim)] underline-offset-4">《用户服务协议》</a>与<a href="#" class="underline decoration-[var(--gold-dim)] underline-offset-4">《隐私政策》</a></span>
+            </label>
+          </div>
+
+          <button data-dom-id="submit-reserve" type="submit" class="btn-primary mt-8 w-full">确认预约</button>
+
+          <div id="reserve-success" class="mt-6 hidden rounded-lg border border-[var(--state-success)] bg-[var(--state-success)]/10 p-4 text-center text-[var(--milk-100)]">
+            <p class="font-semibold">预约成功</p>
+            <p class="mt-1 text-sm text-[var(--milk-300)]">乱世风云，待君一剑开之。</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section-charcoal py-24 lg:py-32">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="mb-12 text-center reveal">
+          <div class="section-badge justify-center">REWARDS</div>
+          <h2 class="text-section mb-5">预约里程碑奖励</h2>
+          <div class="divider-gold mx-auto divider-animated mb-6"></div>
+          <p class="text-body">集结乱世英豪，解锁全服限定好礼。</p>
+        </div>
+
+        <div class="mb-10 reveal">
+          <div class="mb-2 flex justify-between text-sm">
+            <span class="text-[var(--milk-200)]">当前预约人数</span>
+            <span class="font-display text-[var(--gold-pale)]">235 万 / 500 万</span>
+          </div>
+          <div class="h-3 w-full overflow-hidden rounded-full bg-[var(--wheat-stone)]">
+            <div id="reward-progress" class="h-full rounded-full bg-gradient-to-r from-[var(--gold-muted)] via-[var(--gold-base)] to-[var(--gold-bright)]" style="width: 0%;" data-width="47%"></div>
           </div>
         </div>
-      </section>
-    </main>
 
-    <footer class="border-t border-[var(--wheat-bronze)] bg-[var(--wheat-black)] py-8 text-center">
-      <p class="mx-auto max-w-3xl px-6 text-xs leading-relaxed text-[var(--milk-500)]">
-        本网站为粉丝设计作品，非官方站点。燕云十六声版权归原开发商所有。
-      </p>
-    </footer>
+        <div class="space-y-4">
+          <div class="card corner-flourish flex items-center gap-5 p-5 reveal">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--crimson-deep)] text-[var(--gold-pale)] font-display">50万</div>
+            <div>
+              <h4 class="text-subhead mb-1">铜钱 × 88888</h4>
+              <p class="text-sm text-[var(--milk-500)]">行走江湖，盘缠先行</p>
+            </div>
+            <span class="ml-auto text-xs text-[var(--state-success)]">已解锁</span>
+          </div>
+          <div class="card corner-flourish flex items-center gap-5 p-5 reveal">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--crimson-deep)] text-[var(--gold-pale)] font-display">100万</div>
+            <div>
+              <h4 class="text-subhead mb-1">限定外观 · 苍云游侠</h4>
+              <p class="text-sm text-[var(--milk-500)]">一袭白衣，入世出尘</p>
+            </div>
+            <span class="ml-auto text-xs text-[var(--state-success)]">已解锁</span>
+          </div>
+          <div class="card corner-flourish flex items-center gap-5 p-5 reveal">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--wheat-bronze)] text-[var(--gold-pale)] font-display">200万</div>
+            <div>
+              <h4 class="text-subhead mb-1">坐骑 · 墨羽惊风</h4>
+              <p class="text-sm text-[var(--milk-500)]">日行千里，踏遍河山</p>
+            </div>
+            <span class="ml-auto text-xs text-[var(--gold-bright)]">即将解锁</span>
+          </div>
+          <div class="card corner-flourish flex items-center gap-5 p-5 reveal">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--wheat-bronze)] text-[var(--gold-pale)] font-display">500万</div>
+            <div>
+              <h4 class="text-subhead mb-1">限定称号 · 乱世开山人</h4>
+              <p class="text-sm text-[var(--milk-500)]">一剑开天，留名青史</p>
+            </div>
+            <span class="ml-auto text-xs text-[var(--milk-500)]">未解锁</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <script>
-      (function () {
-        lucide.createIcons();
+    <section class="section-dark py-24 lg:py-32">
+      <div class="mx-auto max-w-5xl px-6 text-center">
+        <div class="mb-16 reveal">
+          <div class="section-badge justify-center">COMMUNITY</div>
+          <h2 class="text-section mb-5">关注官方社区</h2>
+          <div class="divider-gold mx-auto divider-animated"></div>
+        </div>
 
-        const targetDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-        function updateCountdown() {
-          const diff = targetDate - Date.now();
-          const days = document.getElementById('cd-days');
-          const hours = document.getElementById('cd-hours');
-          const minutes = document.getElementById('cd-minutes');
-          const seconds = document.getElementById('cd-seconds');
-          if (!days || !hours || !minutes || !seconds) return;
-          if (diff <= 0) {
-            days.textContent = hours.textContent = minutes.textContent = seconds.textContent = '00';
-            return;
-          }
-          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-          const m = Math.floor((diff / (1000 * 60)) % 60);
-          const s = Math.floor((diff / 1000) % 60);
-          days.textContent = String(d).padStart(2, '0');
-          hours.textContent = String(h).padStart(2, '0');
-          minutes.textContent = String(m).padStart(2, '0');
-          seconds.textContent = String(s).padStart(2, '0');
+        <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <a href="#" class="card corner-flourish community-link flex flex-col items-center gap-3 p-6 reveal">
+            <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span class="text-sm text-[var(--milk-200)]">官方微博</span>
+          </a>
+          <a href="#" class="card corner-flourish community-link flex flex-col items-center gap-3 p-6 reveal">
+            <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2"></rect>
+            </svg>
+            <span class="text-sm text-[var(--milk-200)]">B站</span>
+          </a>
+          <a href="#" class="card corner-flourish community-link flex flex-col items-center gap-3 p-6 reveal">
+            <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <span class="text-sm text-[var(--milk-200)]">微信公众号</span>
+          </a>
+          <a href="#" class="card corner-flourish community-link flex flex-col items-center gap-3 p-6 reveal">
+            <svg viewBox="0 0 24 24" class="h-7 w-7 text-[var(--gold-base)]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="text-sm text-[var(--milk-200)]">Discord</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-[var(--wheat-bronze)]/40 bg-[var(--wheat-black)] py-8 text-center">
+    <p class="mx-auto max-w-3xl px-6 text-xs leading-relaxed text-[var(--milk-500)]">
+      本网站为粉丝设计作品，非官方站点。燕云十六声版权归原开发商所有。
+    </p>
+  </footer>
+
+  <script>
+    (function () {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      const targetDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+      function updateCountdown() {
+        const diff = targetDate - Date.now();
+        const days = document.getElementById('cd-days');
+        const hours = document.getElementById('cd-hours');
+        const minutes = document.getElementById('cd-minutes');
+        const seconds = document.getElementById('cd-seconds');
+        if (!days || !hours || !minutes || !seconds) return;
+        if (diff <= 0) {
+          days.textContent = hours.textContent = minutes.textContent = seconds.textContent = '00';
+          return;
         }
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        days.textContent = String(d).padStart(2, '0');
+        hours.textContent = String(h).padStart(2, '0');
+        minutes.textContent = String(m).padStart(2, '0');
+        seconds.textContent = String(s).padStart(2, '0');
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
 
-        const form = document.querySelector('[data-dom-id="form-reserve"]');
-        const phoneInput = document.getElementById('phone');
-        const phoneError = document.getElementById('phone-error');
-        const successPanel = document.getElementById('reserve-success');
+      const form = document.querySelector('[data-dom-id="form-reserve"]');
+      const phoneInput = document.getElementById('phone');
+      const phoneError = document.getElementById('phone-error');
+      const successPanel = document.getElementById('reserve-success');
 
-        function isValidPhone(value) {
-          return /^1[3-9]\d{9}$/.test(value.replace(/\s/g, ''));
+      function isValidPhone(value) {
+        return /^1[3-9]\d{9}$/.test(value.replace(/\s/g, ''));
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        successPanel.classList.add('hidden');
+        const phone = phoneInput.value.trim();
+        if (!isValidPhone(phone)) {
+          phoneError.classList.remove('hidden');
+          phoneInput.focus();
+          return;
         }
+        phoneError.classList.add('hidden');
+        successPanel.classList.remove('hidden');
+        form.reset();
+      });
 
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-          successPanel.classList.add('hidden');
-          const phone = phoneInput.value.trim();
-          if (!isValidPhone(phone)) {
-            phoneError.classList.remove('hidden');
-            phoneInput.focus();
-            return;
-          }
-          phoneError.classList.add('hidden');
-          successPanel.classList.remove('hidden');
-          form.reset();
-        });
+      document.getElementById('send-code').addEventListener('click', function () {
+        const phone = phoneInput.value.trim();
+        if (!isValidPhone(phone)) {
+          phoneError.classList.remove('hidden');
+          phoneInput.focus();
+          return;
+        }
+        phoneError.classList.add('hidden');
+        this.textContent = '已发送';
+        this.disabled = true;
+        setTimeout(() => {
+          this.textContent = '获取验证码';
+          this.disabled = false;
+        }, 3000);
+      });
 
-        document.getElementById('send-code').addEventListener('click', function () {
-          const phone = phoneInput.value.trim();
-          if (!isValidPhone(phone)) {
-            phoneError.classList.remove('hidden');
-            phoneInput.focus();
-            return;
-          }
-          phoneError.classList.add('hidden');
-          this.textContent = '已发送';
-          this.disabled = true;
-          setTimeout(() => {
-            this.textContent = '获取验证码';
-            this.disabled = false;
-          }, 3000);
-        });
-
-        const revealElements = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              const progress = entry.target.querySelector('#reward-progress');
-              if (progress) {
-                progress.style.width = progress.getAttribute('data-width');
-              }
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+            const progress = entry.target.querySelector('#reward-progress');
+            if (progress) {
+              progress.style.width = progress.getAttribute('data-width');
             }
-          });
-        }, { threshold: 0.15 });
-        revealElements.forEach((el) => observer.observe(el));
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
-        const progress = document.getElementById('reward-progress');
-        if (progress && progress.getBoundingClientRect().top < window.innerHeight) {
-          progress.style.width = progress.getAttribute('data-width');
-        }
-      })();
-    </script>
+      const progress = document.getElementById('reward-progress');
+      if (progress && progress.getBoundingClientRect().top < window.innerHeight) {
+        progress.style.width = progress.getAttribute('data-width');
+      }
+    })();
+  </script>
 </body>
 </html>

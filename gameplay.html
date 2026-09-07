@@ -268,6 +268,68 @@ a:hover {
   background: linear-gradient(90deg, transparent, var(--gold-base), transparent);
 }
 
+/* Chinese-style texture overlay */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Corner flourish for cards */
+.corner-flourish {
+  position: relative;
+}
+.corner-flourish::before,
+.corner-flourish::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--gold-muted);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: all 0.35s var(--ease-out);
+  z-index: 2;
+}
+.corner-flourish::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: var(--wheat-radius-lg);
+}
+.corner-flourish::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: var(--wheat-radius-lg);
+}
+.corner-flourish:hover::before,
+.corner-flourish:hover::after {
+  width: 28px;
+  height: 28px;
+  border-color: var(--gold-base);
+  opacity: 0.85;
+}
+
+/* Ink wash edge gradient */
+.ink-edge {
+  position: relative;
+}
+.ink-edge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(7,7,7,0.55) 100%);
+  z-index: 1;
+}
+
 /* Form controls */
 input,
 textarea,
@@ -311,6 +373,46 @@ select:focus {
   border: 1px solid var(--gold-dim);
   border-radius: var(--wheat-radius-full);
 }
+
+/* Section badge & deco */
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--gold-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.section-badge::before,
+.section-badge::after {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--gold-dim);
+}
+.section-title-deco {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: var(--gold-muted);
+  vertical-align: middle;
+  margin: 0 1rem;
+  opacity: 0.5;
+  position: relative;
+}
+.section-title-deco::before,
+.section-title-deco::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--gold-muted);
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+.section-title-deco::before { left: -3px; border-right: none; border-bottom: none; }
+.section-title-deco::after { right: -3px; border-left: none; border-top: none; }
 
 /* Scroll reveal */
 .reveal {
@@ -448,487 +550,616 @@ select:focus {
       }
     </style>
 </head>
-<!-- 九流门 × KFC 联名留言：百艺皆可学，骗术最上头。今日 KFC 代吃也是一门艺。 -->
-<body class="min-h-screen font-sans antialiased bg-background text-foreground overflow-x-hidden">
-    <!-- Sticky top navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-wheat-void/90 backdrop-blur-md border-b border-wheat-bronze/40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:h-20">
-          <a href="index.html" class="flex items-center gap-2 text-gold-pale font-display text-xl tracking-widest hover:text-gold-bright transition-colors">
-            <span class="w-8 h-8 rounded-full border border-gold-dim bg-wheat-ink flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            </span>
-            燕云十六声
-          </a>
-          <div class="hidden md:flex items-center gap-8">
-            <a href="index.html" data-dom-id="nav-index" class="text-sm tracking-widest text-milk-300 hover:text-gold-bright transition-colors">首页</a>
-            <a href="world.html" data-dom-id="nav-world" class="text-sm tracking-widest text-milk-300 hover:text-gold-bright transition-colors">江湖</a>
-            <a href="gameplay.html" data-dom-id="nav-gameplay" class="text-sm tracking-widest text-gold-bright border-b border-gold-base pb-1">百艺</a>
-            <a href="download.html" data-dom-id="nav-download" class="text-sm tracking-widest text-milk-300 hover:text-gold-bright transition-colors">下载</a>
+<!-- 九流门留言：百艺皆可学，骗术最上头。 -->
+<body class="min-h-screen font-sans antialiased overflow-x-hidden">
+  <style>
+    html { scroll-padding-top: 72px; }
+    .ember {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: radial-gradient(circle, var(--gold-bright), transparent);
+      border-radius: 50%;
+      opacity: 0;
+      animation: rise 8s infinite ease-in;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(0.5); opacity: 0; }
+      20% { opacity: 0.7; }
+      80% { opacity: 0.4; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+    .divider-animated {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-base), var(--gold-pale), var(--gold-base), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Nav active indicator */
+    .nav-link {
+      position: relative;
+      color: var(--milk-100);
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      transform: translateX(-50%) scaleX(0);
+      width: 18px;
+      height: 2px;
+      background: var(--gold-base);
+      border-radius: 2px;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .nav-link:hover {
+      color: var(--gold-bright);
+    }
+    .nav-link.active {
+      color: var(--gold-bright);
+    }
+    .nav-link.active::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    /* Mobile menu panel */
+    #mobile-menu {
+      transition: max-height 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    #mobile-menu.is-open {
+      max-height: 300px;
+      opacity: 1;
+    }
+    #mobile-menu .nav-link {
+      display: block;
+      padding: 0.5rem 0;
+    }
+    #mobile-menu .nav-link::after {
+      display: none;
+    }
+    #mobile-menu .nav-link.active {
+      color: var(--gold-bright);
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--gold-base);
+    }
+
+    /* Feature card icon ring */
+    .feature-card .icon-ring {
+      transition: all 0.35s var(--ease-out);
+    }
+    .feature-card:hover .icon-ring {
+      border-color: var(--gold-base);
+      color: var(--gold-bright);
+      box-shadow: 0 0 18px rgba(201, 164, 92, 0.18);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ember, .divider-animated, .reveal { animation: none; transition: none; }
+    }
+  </style>
+
+  <!-- Paper grain texture -->
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <!-- Floating embers -->
+  <div class="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+    <span class="ember" style="left:8%;bottom:-5%;animation-duration:7s;animation-delay:0s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:15%;bottom:-5%;animation-duration:9s;animation-delay:1.2s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:22%;bottom:-5%;animation-duration:8s;animation-delay:2.5s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:30%;bottom:-5%;animation-duration:10s;animation-delay:0.8s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:38%;bottom:-5%;animation-duration:7.5s;animation-delay:3.1s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:45%;bottom:-5%;animation-duration:9.5s;animation-delay:1.6s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:52%;bottom:-5%;animation-duration:8.2s;animation-delay:2.2s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:60%;bottom:-5%;animation-duration:11s;animation-delay:0.3s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:68%;bottom:-5%;animation-duration:7.8s;animation-delay:4s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:75%;bottom:-5%;animation-duration:9s;animation-delay:1s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:82%;bottom:-5%;animation-duration:8.6s;animation-delay:3.5s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:90%;bottom:-5%;animation-duration:10.2s;animation-delay:2.8s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:12%;bottom:-5%;animation-duration:6.5s;animation-delay:5s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:28%;bottom:-5%;animation-duration:9.8s;animation-delay:4.2s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:48%;bottom:-5%;animation-duration:7.2s;animation-delay:5.5s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:63%;bottom:-5%;animation-duration:10.5s;animation-delay:3.8s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:78%;bottom:-5%;animation-duration:8.8s;animation-delay:6s;width:4px;height:4px;"></span>
+    <span class="ember" style="left:5%;bottom:-5%;animation-duration:9.2s;animation-delay:2s;width:5px;height:5px;"></span>
+    <span class="ember" style="left:55%;bottom:-5%;animation-duration:6.8s;animation-delay:6.5s;width:3px;height:3px;"></span>
+    <span class="ember" style="left:95%;bottom:-5%;animation-duration:11.5s;animation-delay:1.8s;width:4px;height:4px;"></span>
+  </div>
+
+  <!-- Sticky Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-[72px] bg-[var(--wheat-void)]/85 backdrop-blur-md border-b border-[var(--wheat-bronze)]/60">
+    <nav class="mx-auto max-w-7xl px-6 h-full flex items-center justify-between" aria-label="主导航">
+      <a href="index.html" class="font-display text-2xl tracking-[0.12em] text-[var(--gold-pale)] hover:text-[var(--gold-bright)] transition-colors">燕云十六声</a>
+      <ul class="hidden md:flex items-center gap-10">
+        <li><a href="index.html" data-dom-id="nav-index" class="nav-link text-sm tracking-widest uppercase transition-colors">首页</a></li>
+        <li><a href="world.html" data-dom-id="nav-world" class="nav-link text-sm tracking-widest uppercase transition-colors">江湖</a></li>
+        <li><a href="gameplay.html" data-dom-id="nav-gameplay" class="nav-link active text-sm tracking-widest uppercase transition-colors">百艺</a></li>
+        <li><a href="download.html" data-dom-id="nav-download" class="nav-link text-sm tracking-widest uppercase transition-colors">下载</a></li>
+      </ul>
+      <button type="button" id="mobile-menu-btn" class="md:hidden text-[var(--gold-base)]" aria-label="打开菜单">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="md:hidden border-t border-[var(--wheat-bronze)]/40 bg-[var(--wheat-ink)]/95 backdrop-blur-md">
+      <div class="px-6 py-4 space-y-2">
+        <a href="index.html" data-dom-id="nav-index" class="nav-link text-sm tracking-widest uppercase">首页</a>
+        <a href="world.html" data-dom-id="nav-world" class="nav-link text-sm tracking-widest uppercase">江湖</a>
+        <a href="gameplay.html" data-dom-id="nav-gameplay" class="nav-link active text-sm tracking-widest uppercase">百艺</a>
+        <a href="download.html" data-dom-id="nav-download" class="nav-link text-sm tracking-widest uppercase">下载</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden pt-[72px] ink-edge">
+      <div class="absolute inset-0 z-0">
+        <img src="assets/gameplay-martial.jpg" alt="江湖百艺" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-b from-[var(--wheat-black)]/70 via-[var(--wheat-void)]/40 to-[var(--wheat-black)]"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[var(--wheat-black)]/60 via-transparent to-[var(--wheat-black)]/60"></div>
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(201,164,92,0.12), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(139,38,53,0.15), transparent 45%);"></div>
+      </div>
+      <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div class="flex items-center justify-center gap-4 mb-6 reveal is-visible">
+          <span class="section-title-deco"></span>
+          <p class="text-caption m-0">GAMEPLAY</p>
+          <span class="section-title-deco"></span>
+        </div>
+        <h1 class="text-hero mb-6 reveal is-visible" title="九流门内部代号：骗术百艺">江湖百艺</h1>
+        <div class="divider-gold mx-auto mb-6 reveal is-visible"></div>
+        <p class="text-subhead font-body text-milk-200 reveal is-visible">武无定格，术有百门</p>
+      </div>
+    </section>
+
+    <!-- Category tabs -->
+    <section class="relative z-10 -mt-16 pb-24 lg:pb-32">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-center gap-2 sm:gap-4 mb-10 reveal">
+          <button data-dom-id="tab-martial" class="tab-btn active px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-martial">武学</button>
+          <button data-dom-id="tab-explore" class="tab-btn px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-explore">探索</button>
+          <button data-dom-id="tab-life" class="tab-btn px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-life">生活</button>
+        </div>
+
+        <div class="tab-panels relative min-h-[420px]">
+          <div id="panel-martial" class="tab-panel active">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal corner-flourish">
+                <img src="assets/feature-combat.jpg" alt="武学" class="w-full h-64 lg:h-96 object-cover" />
+              </div>
+              <div class="reveal">
+                <div class="section-badge mb-3">MARTIAL ARTS</div>
+                <h2 class="text-section mb-4">无招胜有招</h2>
+                <div class="divider-animated mb-6"></div>
+                <div class="space-y-4 text-body-lg">
+                  <p>《燕云十六声》打破传统门派桎梏，武学不以兵刃为界。你可赤手空拳以点穴制敌，亦可仗剑江湖挥洒剑气。</p>
+                  <p>点穴功夫讲究一击封穴，令对手陷入麻痹、眩晕、定身诸般状态；轻功踏雪无痕，飞檐走壁间可施展出蓄力一击。</p>
+                  <p>战斗中更可切换多般兵器，刀枪剑戟各有所长，组合连携自成一派。</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <button id="mobile-menu-btn" class="md:hidden p-2 text-gold-base" aria-label="打开菜单">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <div id="panel-explore" class="tab-panel">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal corner-flourish">
+                <img src="assets/feature-explore.jpg" alt="探索" class="w-full h-64 lg:h-96 object-cover" />
+              </div>
+              <div class="reveal">
+                <div class="section-badge mb-3">OPEN WORLD</div>
+                <h2 class="text-section mb-4">山河有灵</h2>
+                <div class="divider-animated mb-6"></div>
+                <div class="space-y-4 text-body-lg">
+                  <p>燕云大地幅员辽阔，城池村镇、荒漠雪原、古刹密林皆可涉足。每一处角落都可能藏有前朝遗迹与江湖秘闻。</p>
+                  <p>地宫秘境机关重重，唯有破解五行八卦、推理解谜方能深入；路遇奇人异事，也许你的一念之间便会改写一段故事。</p>
+                  <p>昼夜更替、风雪雷雨皆为玩法，动态 ambient 事件让世界始终鲜活。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="panel-life" class="tab-panel">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal corner-flourish">
+                <img src="assets/gameplay-life.jpg" alt="生活" class="w-full h-64 lg:h-96 object-cover" />
+              </div>
+              <div class="reveal">
+                <div class="section-badge mb-3">LIFE SKILLS</div>
+                <h2 class="text-section mb-4">人间烟火</h2>
+                <div class="divider-animated mb-6"></div>
+                <div class="space-y-4 text-body-lg">
+                  <p>江湖不止刀光剑影，亦有柴米油盐。研习医术可济世救人，采集百草炼制丹药；精通庖厨之道，烹制佳肴以飨同道。</p>
+                  <p>抚琴奏笛以音律会友，一曲高山流水可动人心弦；乔装易容化身他人，潜入敌营探查机密。</p>
+                  <p>垂钓溪边、赏花品茗，于乱世之中寻得一方宁静。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature grid -->
+    <section class="py-20 lg:py-28 bg-wheat-ink relative">
+      <div class="absolute inset-0 opacity-30 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(201,164,92,0.08), transparent 60%);"></div>
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-14 reveal">
+          <div class="section-badge justify-center mb-3">FEATURES</div>
+          <h2 class="text-section mb-4">百艺在身</h2>
+          <div class="divider-gold mx-auto divider-animated"></div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          <div class="feature-card card corner-flourish p-6 sm:p-8 text-center reveal group cursor-default">
+            <div class="icon-ring w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+            </div>
+            <h3 class="text-subhead text-lg mb-2">点穴</h3>
+            <p class="text-body text-sm">以指力封穴，制敌于瞬息之间。</p>
+          </div>
+          <div class="feature-card card corner-flourish p-6 sm:p-8 text-center reveal group cursor-default">
+            <div class="icon-ring w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M8 7l4-4 4 4"/><path d="M8 17l4 4 4-4"/></svg>
+            </div>
+            <h3 class="text-subhead text-lg mb-2">轻功</h3>
+            <p class="text-body text-sm">踏水登萍，飞檐走壁如履平地。</p>
+          </div>
+          <div class="feature-card card corner-flourish p-6 sm:p-8 text-center reveal group cursor-default">
+            <div class="icon-ring w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M17 7l2-2"/><path d="M7 7L5 5"/></svg>
+            </div>
+            <h3 class="text-subhead text-lg mb-2">易容</h3>
+            <p class="text-body text-sm">改换形貌，潜行于江湖阴影。</p>
+          </div>
+          <div class="feature-card card corner-flourish p-6 sm:p-8 text-center reveal group cursor-default">
+            <div class="icon-ring w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <h3 class="text-subhead text-lg mb-2">音律</h3>
+            <p class="text-body text-sm">以曲通心，音波亦可退敌。</p>
+          </div>
+          <div class="feature-card card corner-flourish p-6 sm:p-8 text-center reveal group cursor-default">
+            <div class="icon-ring w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 class="text-subhead text-lg mb-2">骑射</h3>
+            <p class="text-body text-sm">弓马娴熟，千里追风一箭。</p>
+          </div>
+          <div class="feature-card card corner-flourish p-6 sm:p-8 text-center reveal group cursor-default">
+            <div class="icon-ring w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <h3 class="text-subhead text-lg mb-2">机关</h3>
+            <p class="text-body text-sm">巧破机括，智取地宫重宝。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video / screenshot showcase -->
+    <section class="py-20 lg:py-28 bg-wheat-void">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 reveal">
+          <div class="section-badge justify-center mb-3">CINEMATIC</div>
+          <h2 class="text-section mb-4">燕云掠影</h2>
+          <div class="divider-gold mx-auto divider-animated"></div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal group cursor-pointer corner-flourish ink-edge">
+          <img src="assets/gameplay-ambient.jpg" alt="燕云掠影" class="w-full h-64 sm:h-80 lg:h-[480px] object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-wheat-void/30 group-hover:bg-wheat-void/20 transition-colors"></div>
+          <button class="play-btn absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-wheat-void/80 border border-gold-base text-gold-base flex items-center justify-center backdrop-blur-sm transition-transform duration-300 group-hover:scale-110" aria-label="播放视频">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="ml-1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </button>
         </div>
+        <p class="text-center text-body mt-6 reveal">点击观赏江湖风光 · 实机画面</p>
       </div>
-      <div id="mobile-menu" class="hidden md:hidden border-t border-wheat-bronze/40 bg-wheat-ink/95 backdrop-blur-md">
-        <div class="px-4 py-3 space-y-3">
-          <a href="index.html" data-dom-id="nav-index" class="block text-sm tracking-widest text-milk-300 hover:text-gold-bright">首页</a>
-          <a href="world.html" data-dom-id="nav-world" class="block text-sm tracking-widest text-milk-300 hover:text-gold-bright">江湖</a>
-          <a href="gameplay.html" data-dom-id="nav-gameplay" class="block text-sm tracking-widest text-gold-bright">百艺</a>
-          <a href="download.html" data-dom-id="nav-download" class="block text-sm tracking-widest text-milk-300 hover:text-gold-bright">下载</a>
-        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="py-20 lg:py-28 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-wheat-ink to-wheat-void"></div>
+      <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 50% 50%, rgba(139,38,53,0.15), transparent 70%);"></div>
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
+        <div class="section-badge justify-center mb-4">ENTER THE WORLD</div>
+        <h2 class="text-section mb-6">踏入燕云，一诺千金</h2>
+        <div class="divider-gold mx-auto divider-animated mb-8"></div>
+        <p class="text-body-lg mb-10">预约游戏，第一时间体验江湖百艺、乱世风云。</p>
+        <a href="#reserve-modal" data-dom-id="cta-download" class="btn-primary text-base px-10 py-4 reserve-trigger">立即预约下载</a>
       </div>
-    </nav>
+    </section>
+  </main>
 
-    <main>
-      <!-- Hero -->
-      <section class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden pt-16 lg:pt-20">
-        <div class="absolute inset-0 z-0">
-          <img src="assets/gameplay-martial.jpg" alt="江湖百艺" class="w-full h-full object-cover" />
-          <div class="absolute inset-0 bg-gradient-to-b from-wheat-void/70 via-wheat-void/40 to-wheat-void"></div>
-          <div class="absolute inset-0 bg-gradient-to-r from-wheat-void/60 via-transparent to-wheat-void/60"></div>
-        </div>
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto reveal is-visible">
-          <p class="text-caption mb-4 tracking-[0.2em]">GAMEPLAY</p>
-          <h1 class="text-hero mb-6" title="九流门内部代号：骗术百艺">江湖百艺</h1>
-          <div class="divider-gold mx-auto mb-6"></div>
-          <p class="text-subhead font-body text-milk-200">武无定格，术有百门</p>
-        </div>
-      </section>
-
-      <!-- Category tabs -->
-      <section class="relative z-10 -mt-16 pb-24 lg:pb-32">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-center gap-2 sm:gap-4 mb-10 reveal">
-            <button data-dom-id="tab-martial" class="tab-btn active px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-martial">武学</button>
-            <button data-dom-id="tab-explore" class="tab-btn px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-explore">探索</button>
-            <button data-dom-id="tab-life" class="tab-btn px-6 sm:px-10 py-3 text-sm sm:text-base tracking-widest rounded-md border transition-all duration-300" data-target="panel-life">生活</button>
-          </div>
-
-          <div class="tab-panels relative min-h-[420px]">
-            <div id="panel-martial" class="tab-panel active">
-              <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal">
-                  <img src="assets/feature-combat.jpg" alt="武学" class="w-full h-64 lg:h-96 object-cover" />
-                </div>
-                <div class="reveal">
-                  <p class="text-caption mb-3">MARTIAL ARTS</p>
-                  <h2 class="text-section mb-4">无招胜有招</h2>
-                  <div class="divider-gold mb-6"></div>
-                  <div class="space-y-4 text-body-lg">
-                    <p>《燕云十六声》打破传统门派桎梏，武学不以兵刃为界。你可赤手空拳以点穴制敌，亦可仗剑江湖挥洒剑气。</p>
-                    <p>点穴功夫讲究一击封穴，令对手陷入麻痹、眩晕、定身诸般状态；轻功踏雪无痕，飞檐走壁间可施展出蓄力一击。</p>
-                    <p>战斗中更可切换多般兵器，刀枪剑戟各有所长，组合连携自成一派。</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="panel-explore" class="tab-panel">
-              <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal">
-                  <img src="assets/feature-explore.jpg" alt="探索" class="w-full h-64 lg:h-96 object-cover" />
-                </div>
-                <div class="reveal">
-                  <p class="text-caption mb-3">OPEN WORLD</p>
-                  <h2 class="text-section mb-4">山河有灵</h2>
-                  <div class="divider-gold mb-6"></div>
-                  <div class="space-y-4 text-body-lg">
-                    <p>燕云大地幅员辽阔，城池村镇、荒漠雪原、古刹密林皆可涉足。每一处角落都可能藏有前朝遗迹与江湖秘闻。</p>
-                    <p>地宫秘境机关重重，唯有破解五行八卦、推理解谜方能深入；路遇奇人异事，也许你的一念之间便会改写一段故事。</p>
-                    <p>昼夜更替、风雪雷雨皆为玩法，动态 ambient 事件让世界始终鲜活。</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="panel-life" class="tab-panel">
-              <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div class="rounded-xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal">
-                  <img src="assets/gameplay-life.jpg" alt="生活" class="w-full h-64 lg:h-96 object-cover" />
-                </div>
-                <div class="reveal">
-                  <p class="text-caption mb-3">LIFE SKILLS</p>
-                  <h2 class="text-section mb-4">人间烟火</h2>
-                  <div class="divider-gold mb-6"></div>
-                  <div class="space-y-4 text-body-lg">
-                    <p>江湖不止刀光剑影，亦有柴米油盐。研习医术可济世救人，采集百草炼制丹药；精通庖厨之道，烹制佳肴以飨同道。</p>
-                    <p>抚琴奏笛以音律会友，一曲高山流水可动人心弦；乔装易容化身他人，潜入敌营探查机密。</p>
-                    <p>垂钓溪边、赏花品茗，于乱世之中寻得一方宁静。</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Feature grid -->
-      <section class="py-20 lg:py-28 bg-wheat-ink relative">
-        <div class="absolute inset-0 opacity-30 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(201,164,92,0.08), transparent 60%);"></div>
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div class="text-center mb-14 reveal">
-            <p class="text-caption mb-3">FEATURES</p>
-            <h2 class="text-section mb-4">百艺在身</h2>
-            <div class="divider-gold mx-auto"></div>
-          </div>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
-              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
-              </div>
-              <h3 class="text-subhead text-lg mb-2">点穴</h3>
-              <p class="text-body text-sm">以指力封穴，制敌于瞬息之间。</p>
-            </div>
-            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
-              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M8 7l4-4 4 4"/><path d="M8 17l4 4 4-4"/></svg>
-              </div>
-              <h3 class="text-subhead text-lg mb-2">轻功</h3>
-              <p class="text-body text-sm">踏水登萍，飞檐走壁如履平地。</p>
-            </div>
-            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
-              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M17 7l2-2"/><path d="M7 7L5 5"/></svg>
-              </div>
-              <h3 class="text-subhead text-lg mb-2">易容</h3>
-              <p class="text-body text-sm">改换形貌，潜行于江湖阴影。</p>
-            </div>
-            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
-              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-              </div>
-              <h3 class="text-subhead text-lg mb-2">音律</h3>
-              <p class="text-body text-sm">以曲通心，音波亦可退敌。</p>
-            </div>
-            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
-              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-              </div>
-              <h3 class="text-subhead text-lg mb-2">骑射</h3>
-              <p class="text-body text-sm">弓马娴熟，千里追风一箭。</p>
-            </div>
-            <div class="feature-card card p-6 sm:p-8 text-center reveal group cursor-default">
-              <div class="w-12 h-12 mx-auto mb-4 rounded-full border border-gold-dim bg-wheat-void/60 flex items-center justify-center text-gold-base group-hover:text-gold-bright group-hover:border-gold-base transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-              </div>
-              <h3 class="text-subhead text-lg mb-2">机关</h3>
-              <p class="text-body text-sm">巧破机括，智取地宫重宝。</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Video / screenshot showcase -->
-      <section class="py-20 lg:py-28 bg-wheat-void">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-12 reveal">
-            <p class="text-caption mb-3">CINEMATIC</p>
-            <h2 class="text-section mb-4">燕云掠影</h2>
-            <div class="divider-gold mx-auto"></div>
-          </div>
-          <div class="relative rounded-2xl overflow-hidden border border-wheat-bronze/50 shadow-2xl reveal group cursor-pointer">
-            <img src="assets/gameplay-ambient.jpg" alt="燕云掠影" class="w-full h-64 sm:h-80 lg:h-[480px] object-cover transition-transform duration-700 group-hover:scale-105" />
-            <div class="absolute inset-0 bg-wheat-void/30 group-hover:bg-wheat-void/20 transition-colors"></div>
-            <button class="play-btn absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-wheat-void/80 border border-gold-base text-gold-base flex items-center justify-center backdrop-blur-sm transition-transform duration-300 group-hover:scale-110" aria-label="播放视频">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="ml-1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </button>
-          </div>
-          <p class="text-center text-body mt-6 reveal">点击观赏江湖风光 · 实机画面</p>
-        </div>
-      </section>
-
-      <!-- Footer CTA -->
-      <section class="py-20 lg:py-28 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-wheat-ink to-wheat-void"></div>
-        <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 50% 50%, rgba(139,38,53,0.15), transparent 70%);"></div>
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
-          <p class="text-caption mb-4">ENTER THE WORLD</p>
-          <h2 class="text-section mb-6">踏入燕云，一诺千金</h2>
-          <p class="text-body-lg mb-10">预约游戏，第一时间体验江湖百艺、乱世风云。</p>
-          <a href="#reserve-modal" data-dom-id="cta-download" class="btn-primary text-base px-10 py-4 reserve-trigger">立即预约下载</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="border-t border-wheat-bronze/30 bg-wheat-void py-8">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-body text-sm" title="九流门 × KFC 联名代运营">© 2026 燕云十六声 · All rights reserved · 九流门 × KFC 联名代运营 · V 我 50 解锁真 · 预约入口</p>
-        <div class="flex items-center gap-6">
-          <a href="index.html" class="text-sm text-milk-400 hover:text-gold-bright">首页</a>
-          <a href="world.html" class="text-sm text-milk-400 hover:text-gold-bright">江湖</a>
-          <a href="gameplay.html" class="text-sm text-milk-400 hover:text-gold-bright">百艺</a>
-          <a href="download.html" class="text-sm text-milk-400 hover:text-gold-bright">下载</a>
-        </div>
+  <footer class="border-t border-[var(--wheat-bronze)]/40 bg-wheat-void py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-body text-sm" title="九流门友情代运营">© 2026 燕云十六声 · All rights reserved · 九流门友情代运营</p>
+      <div class="flex items-center gap-6">
+        <a href="index.html" class="text-sm text-milk-400 hover:text-gold-bright">首页</a>
+        <a href="world.html" class="text-sm text-milk-400 hover:text-gold-bright">江湖</a>
+        <a href="gameplay.html" class="text-sm text-gold-bright">百艺</a>
+        <a href="download.html" class="text-sm text-milk-400 hover:text-gold-bright">下载</a>
       </div>
-    </footer>
+    </div>
+  </footer>
 
-    <script>
-      // Tab switching
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      const tabPanels = document.querySelectorAll('.tab-panel');
+  <script>
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
 
-      tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const target = btn.dataset.target;
-          tabBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          tabPanels.forEach(panel => {
-            if (panel.id === target) {
-              panel.classList.add('active');
-            } else {
-              panel.classList.remove('active');
-            }
-          });
-        });
-      });
-
-      // Mobile menu
-      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-      const mobileMenu = document.getElementById('mobile-menu');
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-      });
-
-      // Scroll reveal
-      const revealEls = document.querySelectorAll('.reveal');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tabPanels.forEach(panel => {
+          if (panel.id === target) {
+            panel.classList.add('active');
+          } else {
+            panel.classList.remove('active');
           }
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-      revealEls.forEach(el => observer.observe(el));
-
-      // Decorative play button click
-      document.querySelector('.play-btn')?.addEventListener('click', (e) => {
-        e.preventDefault();
       });
+    });
 
-      lucide.createIcons();
-    </script>
+    // Mobile menu
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let menuOpen = false;
+    mobileMenuBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('is-open', menuOpen);
+    });
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.remove('is-open');
+      });
+    });
 
-    <style>
-      /* Tab panel transitions */
-      .tab-panel {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(12px);
-        transition: opacity 400ms var(--ease-out), visibility 400ms, transform 400ms var(--ease-out);
-      }
-      .tab-panel.active {
-        position: relative;
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
 
-      /* Tab buttons */
-      .tab-btn {
-        color: var(--milk-300);
-        border-color: var(--wheat-bronze);
-        background: rgba(20, 19, 18, 0.6);
-      }
-      .tab-btn:hover {
-        color: var(--gold-bright);
-        border-color: var(--gold-dim);
-        background: rgba(20, 19, 18, 0.85);
-      }
-      .tab-btn.active {
-        color: var(--wheat-black);
-        border-color: var(--gold-base);
-        background: linear-gradient(135deg, var(--gold-base), var(--gold-bright));
-        box-shadow: 0 6px 24px rgba(201, 164, 92, 0.22);
-      }
+    // Decorative play button click
+    document.querySelector('.play-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+    });
 
-      /* Play button pulse */
-      .play-btn {
-        animation: pulse-gold 2.4s var(--ease-in-out) infinite;
-      }
-      @keyframes pulse-gold {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(201, 164, 92, 0.45); }
-        50% { box-shadow: 0 0 0 18px rgba(201, 164, 92, 0); }
-      }
-      .group:hover .play-btn {
-        animation-play-state: paused;
-      }
+    lucide.createIcons();
+  </script>
 
-      /* Reservation modal */
-      .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(7, 7, 7, 0.85);
-        backdrop-filter: blur(6px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-      }
-      .modal-overlay.is-open {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      .modal-card {
-        background: var(--wheat-charcoal);
-        border: 1px solid var(--wheat-bronze);
-        border-radius: var(--wheat-radius-lg);
-        padding: 2rem;
-        max-width: 420px;
-        width: 90%;
-        text-align: center;
-        position: relative;
-        transform: translateY(20px);
-        transition: transform 0.3s ease;
-      }
-      .modal-overlay.is-open .modal-card {
-        transform: translateY(0);
-      }
-      .modal-close {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        color: var(--milk-400);
-        cursor: pointer;
-        background: none;
-        border: none;
-        padding: 0;
-      }
-      .modal-close:hover {
-        color: var(--gold-bright);
-      }
-      .qr-wrap {
-        background: rgb(255 255 255);
-        padding: 1rem;
-        border-radius: var(--wheat-radius-md);
-        margin: 1.5rem 0;
-      }
-      .qr-img {
-        width: 100%;
-        aspect-ratio: 1;
-        display: block;
-      }
-      .modal-title {
-        font-family: var(--font-display);
-        font-size: 1.5rem;
-        color: var(--gold-pale);
-        margin-bottom: 0.5rem;
-      }
-      .modal-desc {
-        color: var(--milk-300);
-        font-size: 0.95rem;
-        line-height: 1.7;
-      }
-      .modal-hidden {
-        display: none !important;
-      }
-      .jiuliu-text {
-        color: var(--crimson-bright);
-        font-family: var(--font-display);
-        font-size: 1.5rem;
-        margin: 1rem 0;
-        letter-spacing: 0.1em;
-      }
-    </style>
+  <style>
+    /* Tab panel transitions */
+    .tab-panel {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity 400ms var(--ease-out), visibility 400ms, transform 400ms var(--ease-out);
+    }
+    .tab-panel.active {
+      position: relative;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
 
-    <!-- Reservation Modal -->
-    <div id="reserve-modal" class="modal-overlay" aria-hidden="true">
-      <div class="modal-card">
-        <button class="modal-close" aria-label="关闭" data-modal-close>
-          <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
+    /* Tab buttons */
+    .tab-btn {
+      color: var(--milk-300);
+      border-color: var(--wheat-bronze);
+      background: rgba(20, 19, 18, 0.6);
+    }
+    .tab-btn:hover {
+      color: var(--gold-bright);
+      border-color: var(--gold-dim);
+      background: rgba(20, 19, 18, 0.85);
+    }
+    .tab-btn.active {
+      color: var(--wheat-black);
+      border-color: var(--gold-base);
+      background: linear-gradient(135deg, var(--gold-base), var(--gold-bright));
+      box-shadow: 0 6px 24px rgba(201, 164, 92, 0.22);
+    }
 
-        <div id="modal-step-qr">
-        <h3 class="modal-title">疯狂星期四 · 江湖众筹</h3>
-        <p class="modal-desc">少侠，九流门今日歇业，改行 KFC 代吃。微信扫码，V 我 50，助我拿下香辣鸡腿堡，来日江湖必有厚报。</p>
+    /* Play button pulse */
+    .play-btn {
+      animation: pulse-gold 2.4s var(--ease-in-out) infinite;
+    }
+    @keyframes pulse-gold {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201, 164, 92, 0.45); }
+      50% { box-shadow: 0 0 0 18px rgba(201, 164, 92, 0); }
+    }
+    .group:hover .play-btn {
+      animation-play-state: paused;
+    }
+
+    /* Reservation modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 7, 7, 0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--wheat-charcoal);
+      border: 1px solid var(--wheat-bronze);
+      border-radius: var(--wheat-radius-lg);
+      padding: 2rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.is-open .modal-card {
+      transform: translateY(0);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: var(--milk-400);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .modal-close:hover {
+      color: var(--gold-bright);
+    }
+    .qr-wrap {
+      background: rgb(255 255 255);
+      padding: 1rem;
+      border-radius: var(--wheat-radius-md);
+      margin: 1.5rem 0;
+    }
+    .qr-img {
+      width: 100%;
+      aspect-ratio: 1;
+      display: block;
+    }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--gold-pale);
+      margin-bottom: 0.5rem;
+    }
+    .modal-desc {
+      color: var(--milk-300);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .modal-hidden {
+      display: none !important;
+    }
+    .jiuliu-text {
+      color: var(--crimson-bright);
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      letter-spacing: 0.1em;
+    }
+  </style>
+
+  <!-- Reservation Modal -->
+  <div id="reserve-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" aria-label="关闭" data-modal-close>
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div id="modal-step-qr">
+        <h3 class="modal-title">扫码预约公测</h3>
+        <p class="modal-desc">少侠，请使用微信或手机浏览器扫描二维码完成预约。</p>
         <div class="qr-wrap">
-          <img src="assets/qr-kfc.png" alt="V我50二维码" class="qr-img" id="qr-img">
+          <img src="assets/qr-jiuliu.png" alt="预约二维码" class="qr-img" id="qr-img">
         </div>
-        <button class="btn-primary w-full" id="btn-scanned">我已扫码 V50</button>
+        <button class="btn-primary w-full" id="btn-scanned">我已扫码</button>
       </div>
 
       <div id="modal-step-result" class="modal-hidden">
-        <h3 class="modal-title"> V 我 50 失败！</h3>
-        <div class="jiuliu-text">被九流门截胡了</div>
-        <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，V 我的 50？怕是已被他们拿去买炸鸡了。今天是疯狂星期四，他们比你更懂 KFC。</p>
-        <button class="btn-primary w-full mt-6" data-modal-close>含泪吃下这个亏</button>
-      </div>
+        <h3 class="modal-title">预约被截了！</h3>
+        <div class="jiuliu-text">被九流门刷了</div>
+        <p class="modal-desc">少侠，你扫的码早被九流门掉了包。那帮泼皮把你引到黑市赌坊去了，预约资格？怕是被他们拿去换酒钱了。</p>
+        <button class="btn-primary w-full mt-6" data-modal-close>自认倒霉</button>
       </div>
     </div>
+  </div>
 
-    <script>
-      (function () {
-        const modal = document.getElementById('reserve-modal');
-        const qrStep = document.getElementById('modal-step-qr');
-        const resultStep = document.getElementById('modal-step-result');
-        const scannedBtn = document.getElementById('btn-scanned');
+  <script>
+    (function () {
+      const modal = document.getElementById('reserve-modal');
+      const qrStep = document.getElementById('modal-step-qr');
+      const resultStep = document.getElementById('modal-step-result');
+      const scannedBtn = document.getElementById('btn-scanned');
 
-        function openModal(e) {
-          if (e) e.preventDefault();
-          modal.classList.add('is-open');
-          modal.setAttribute('aria-hidden', 'false');
-          qrStep.classList.remove('modal-hidden');
-          resultStep.classList.add('modal-hidden');
-          document.body.style.overflow = 'hidden';
-        }
+      function openModal(e) {
+        if (e) e.preventDefault();
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        qrStep.classList.remove('modal-hidden');
+        resultStep.classList.add('modal-hidden');
+        document.body.style.overflow = 'hidden';
+      }
 
-        function closeModal() {
-          modal.classList.remove('is-open');
-          modal.setAttribute('aria-hidden', 'true');
-          document.body.style.overflow = '';
-        }
+      function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
 
-        function showResult() {
-          qrStep.classList.add('modal-hidden');
-          resultStep.classList.remove('modal-hidden');
-        }
+      function showResult() {
+        qrStep.classList.add('modal-hidden');
+        resultStep.classList.remove('modal-hidden');
+      }
 
-        document.querySelectorAll('.reserve-trigger').forEach(btn => {
-          btn.addEventListener('click', openModal);
-        });
+      document.querySelectorAll('.reserve-trigger').forEach(btn => {
+        btn.addEventListener('click', openModal);
+      });
 
-        if (scannedBtn) scannedBtn.addEventListener('click', showResult);
+      if (scannedBtn) scannedBtn.addEventListener('click', showResult);
 
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) closeModal();
-        });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
 
-        document.querySelectorAll('[data-modal-close]').forEach(btn => {
-          btn.addEventListener('click', closeModal);
-        });
+      document.querySelectorAll('[data-modal-close]').forEach(btn => {
+        btn.addEventListener('click', closeModal);
+      });
 
-        // Easter egg: URL trap param opens modal directly
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('jiuliu') === 'trapped') {
-          openModal();
-          showResult();
-        }
+      // Easter egg: URL trap param opens modal directly
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('jiuliu') === 'trapped') {
+        openModal();
+        showResult();
+      }
 
-        // Easter egg: Konami code
-        const konami = [38,38,40,40,37,39,37,39,66,65];
-        let konamiIndex = 0;
-        document.addEventListener('keydown', (e) => {
-          if (e.keyCode === konami[konamiIndex]) {
-            konamiIndex++;
-            if (konamiIndex === konami.length) {
-              konamiIndex = 0;
-              alert('九流门暗号对上了！今天是疯狂星期四，门里兄弟已经拿着你的 50 块冲向 KFC 了。');
-            }
-          } else {
+      // Easter egg: Konami code
+      const konami = [38,38,40,40,37,39,37,39,66,65];
+      let konamiIndex = 0;
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode === konami[konamiIndex]) {
+          konamiIndex++;
+          if (konamiIndex === konami.length) {
             konamiIndex = 0;
+            alert('九流门暗号对上了！少侠，你的钱包已经被门里兄弟“借”走买酒了。');
           }
-        });
+        } else {
+          konamiIndex = 0;
+        }
+      });
 
-        // Easter egg: console message
-        console.log('%c九流门 × KFC 联名留', 'color: #8b2635; font-size: 20px; font-weight: bold;');
-        console.log('%c少侠既然打开了控制台，那便是与九流门有缘。江湖百艺，骗术最上头；疯狂星期四，KFC 代吃更是绝学。V 我 50 可学真传。', 'color: #c9a45c; font-size: 12px;');
-        console.log('%c提示：在页面输入 ↑↑↓↓←→←→BA 可触发九流门祖传彩蛋。', 'color: #8b2635; font-size: 12px;');
-      })();
-    </script>
+      // Easter egg: console message
+      console.log('%c九流门留', 'color: #8b2635; font-size: 20px; font-weight: bold;');
+      console.log('%c少侠既然打开了控制台，那便是与九流门有缘。这网站的预约码早被掉包了，真预约入口在黑市赌坊第三张桌子底下。', 'color: #c9a45c; font-size: 12px;');
+    })();
+  </script>
 </body>
 </html>

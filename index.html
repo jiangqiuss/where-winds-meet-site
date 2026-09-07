@@ -301,6 +301,67 @@ select:focus {
   background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
 }
 
+/* Chinese-style texture overlay */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Corner flourish for cards */
+.corner-flourish {
+  position: relative;
+}
+.corner-flourish::before,
+.corner-flourish::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--gold-muted);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: all 0.35s var(--ease-out);
+}
+.corner-flourish::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: var(--wheat-radius-lg);
+}
+.corner-flourish::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: var(--wheat-radius-lg);
+}
+.corner-flourish:hover::before,
+.corner-flourish:hover::after {
+  width: 28px;
+  height: 28px;
+  border-color: var(--gold-base);
+  opacity: 0.85;
+}
+
+/* Ink wash edge gradient */
+.ink-edge {
+  position: relative;
+}
+.ink-edge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(7,7,7,0.55) 100%);
+  z-index: 1;
+}
+
 .tag {
   display: inline-flex;
   align-items: center;
@@ -334,6 +395,7 @@ select:focus {
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -432,8 +494,6 @@ select:focus {
       .ring-ring { --tw-ring-color: var(--wheat-ring); }
     </style>
     <style>
-      .no-scrollbar::-webkit-scrollbar { display: none; }
-      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       [data-icon] {
         display: inline-flex;
         align-items: center;
@@ -480,7 +540,6 @@ select:focus {
     }
     .faction-panel { display: none; }
     .faction-panel.is-active { display: block; animation: fadeIn 0.5s var(--ease-out); }
-    .faction-card { cursor: pointer; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -490,75 +549,208 @@ select:focus {
       background: var(--gold-base);
       border-color: var(--gold-base);
     }
-    .carousel-wrap {
+
+    /* Nav active indicator */
+    .nav-link {
       position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      transform: translateX(-50%) scaleX(0);
+      width: 18px;
+      height: 2px;
+      background: var(--gold-base);
+      border-radius: 2px;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .nav-link.active {
+      color: var(--gold-bright);
+    }
+    .nav-link.active::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    /* Faction carousel — 可滑动、完整显示、国风卷轴感 */
+    .carousel-stage {
+      position: relative;
+      padding: 0.5rem 2.75rem 1.25rem;
     }
     .carousel-track {
       display: flex;
-      gap: 1.25rem;
+      flex-wrap: nowrap;
+      gap: var(--carousel-gap, 1.25rem);
       overflow-x: auto;
+      overscroll-behavior-x: contain;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
-      padding: 0.5rem 0.25rem 1.5rem;
+      padding: 0.5rem 0.25rem 1.25rem;
       -webkit-overflow-scrolling: touch;
+      cursor: grab;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold-muted) rgba(201,164,92,0.12);
     }
-    .carousel-track::-webkit-scrollbar { height: 6px; }
-    .carousel-track::-webkit-scrollbar-track { background: rgba(201,164,92,0.1); border-radius: 3px; }
-    .carousel-track::-webkit-scrollbar-thumb { background: var(--gold-muted); border-radius: 3px; }
+    .carousel-track:active { cursor: grabbing; }
+    .carousel-track::-webkit-scrollbar { height: 8px; }
+    .carousel-track::-webkit-scrollbar-track { background: rgba(201,164,92,0.12); border-radius: 4px; }
+    .carousel-track::-webkit-scrollbar-thumb { background: var(--gold-muted); border-radius: 4px; border: 2px solid rgba(13,12,11,0.5); }
+    .carousel-track::-webkit-scrollbar-thumb:hover { background: var(--gold-base); }
     .carousel-arrow {
       position: absolute;
-      top: 50%;
+      top: 42%;
       transform: translateY(-50%);
       z-index: 20;
-      width: 44px;
-      height: 44px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      border: 1px solid var(--wheat-bronze);
-      background: rgba(13,12,11,0.85);
+      border: 1px solid var(--gold-muted);
+      background: rgba(13,12,11,0.92);
       color: var(--gold-base);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.25s var(--ease-out);
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(201,164,92,0.15);
     }
     .carousel-arrow:hover {
       background: var(--gold-base);
       color: var(--wheat-black);
-      border-color: var(--gold-base);
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 24px rgba(201,164,92,0.35);
     }
-    .carousel-arrow.prev { left: -22px; }
-    .carousel-arrow.next { right: -22px; }
-    @media (max-width: 1024px) {
-      .carousel-arrow { display: none; }
-      .carousel-track { padding-bottom: 1rem; }
+    .carousel-arrow.prev { left: 0; }
+    .carousel-arrow.next { right: 0; }
+    .carousel-arrow:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      border-color: var(--wheat-bronze);
+    }
+    .carousel-arrow:disabled:hover {
+      background: rgba(13,12,11,0.92);
+      color: var(--gold-base);
+      border-color: var(--wheat-bronze);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .carousel-fade {
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      bottom: 24px;
+      width: 70px;
+      z-index: 5;
+      opacity: 0.85;
+    }
+    .carousel-fade-left {
+      left: 0;
+      background: linear-gradient(90deg, var(--wheat-void), transparent);
+    }
+    .carousel-fade-right {
+      right: 0;
+      background: linear-gradient(-90deg, var(--wheat-void), transparent);
     }
     .carousel-hint {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      color: var(--gold-muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid rgba(201,164,92,0.25);
+      border-radius: 9999px;
+      background: rgba(13,12,11,0.5);
+      backdrop-filter: blur(4px);
+      opacity: 0.9;
+      transition: all 0.3s var(--ease-out);
+    }
+    .carousel-hint:hover {
+      border-color: rgba(201,164,92,0.5);
+      color: var(--gold-bright);
+    }
+    .carousel-dots {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      color: var(--gold-muted);
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      margin-top: 0.5rem;
-      opacity: 0.8;
+      margin-top: 0.75rem;
+    }
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--wheat-bronze);
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+    }
+    .carousel-dot.active {
+      background: var(--gold-base);
+      box-shadow: 0 0 8px rgba(201,164,92,0.5);
+      width: 22px;
+      border-radius: 9999px;
     }
     .faction-card {
       flex: 0 0 auto;
-      width: clamp(260px, 28vw, 320px);
-      height: clamp(380px, 46vw, 480px);
-      scroll-snap-align: center;
+      width: var(--card-width, calc(25% - var(--carousel-gap, 1.25rem) * 3 / 4));
+      scroll-snap-align: start;
       border-radius: var(--wheat-radius-lg);
       overflow: hidden;
       border: 1px solid var(--wheat-bronze);
       box-shadow: 0 0 0 1px rgba(201,164,92,0.08), 0 20px 50px rgba(0,0,0,0.5);
-      transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+      transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+      cursor: pointer;
+      position: relative;
+      aspect-ratio: 2 / 3;
+      user-select: none;
+    }
+    /* Responsive widths — 保证每个视口完整显示若干张并可滑动 */
+    @media (min-width: 1280px) {
+      .faction-card { --card-width: calc(25% - var(--carousel-gap) * 3 / 4); }
+    }
+    @media (max-width: 1279px) and (min-width: 1024px) {
+      .faction-card { --card-width: calc(33.333% - var(--carousel-gap) * 2 / 3); }
+    }
+    @media (max-width: 1023px) and (min-width: 640px) {
+      .carousel-stage { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .carousel-arrow { display: none; }
+      .carousel-fade { width: 40px; opacity: 0.65; }
+      .faction-card { --card-width: calc(50% - var(--carousel-gap) / 2); }
+    }
+    @media (max-width: 639px) {
+      .carousel-stage { padding-left: 1rem; padding-right: 1rem; }
+      .carousel-arrow { display: none; }
+      .carousel-fade { width: 32px; opacity: 0.55; }
+      .faction-card { --card-width: calc(78% - var(--carousel-gap) / 2); }
+    }
+    .faction-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid transparent;
+      background: linear-gradient(135deg, rgba(201,164,92,0.35), transparent 40%, transparent 60%, rgba(201,164,92,0.2)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease-out);
+      z-index: 15;
+      pointer-events: none;
+    }
+    .faction-card:hover::before,
+    .faction-card.active::before {
+      opacity: 1;
     }
     .faction-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 0 24px rgba(201,164,92,0.2), 0 30px 60px rgba(0,0,0,0.55);
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 28px rgba(201,164,92,0.18), 0 30px 60px rgba(0,0,0,0.55);
     }
     .faction-card img {
       transition: transform 0.7s var(--ease-out), filter 0.4s ease;
@@ -567,16 +759,72 @@ select:focus {
       transform: scale(1.08);
       filter: brightness(1.08);
     }
+    .faction-card.active {
+      border-color: var(--gold-base);
+      box-shadow: 0 0 28px rgba(201,164,92,0.22), 0 30px 60px rgba(0,0,0,0.55);
+    }
+    .faction-card .faction-number {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      line-height: 1;
+      color: rgba(201,164,92,0.35);
+      z-index: 12;
+      pointer-events: none;
+      transition: color 0.35s var(--ease-out);
+    }
+    .faction-card:hover .faction-number,
+    .faction-card.active .faction-number {
+      color: rgba(201,164,92,0.7);
+    }
     .section-title-deco {
       display: inline-block;
-      width: 40px;
+      width: 48px;
       height: 1px;
       background: var(--gold-muted);
       vertical-align: middle;
       margin: 0 1rem;
       opacity: 0.5;
+      position: relative;
+    }
+    .section-title-deco::before,
+    .section-title-deco::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border: 1px solid var(--gold-muted);
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+    }
+    .section-title-deco::before { left: -3px; border-right: none; border-bottom: none; }
+    .section-title-deco::after { right: -3px; border-left: none; border-top: none; }
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--gold-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section-badge::before,
+    .section-badge::after {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--gold-dim);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ember, .divider-animated, .reveal, .faction-card, .faction-card img { animation: none; transition: none; }
     }
   </style>
+
+  <!-- Paper grain texture -->
+  <div class="paper-grain" aria-hidden="true"></div>
 
   <!-- Floating embers -->
   <div class="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
@@ -607,10 +855,11 @@ select:focus {
     <nav class="mx-auto max-w-7xl px-6 h-full flex items-center justify-between" aria-label="主导航">
       <a href="#hero" class="font-display text-2xl tracking-[0.12em] text-[var(--gold-pale)] hover:text-[var(--gold-bright)] transition-colors">燕云十六声</a>
       <ul class="hidden md:flex items-center gap-10">
-        <li><a href="#hero" data-dom-id="nav-index" class="text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">首页</a></li>
-        <li><a href="#world" data-dom-id="nav-world" class="text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">乱世燕云</a></li>
-        <li><a href="#gameplay" data-dom-id="nav-gameplay" class="text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">江湖百艺</a></li>
-        <li><a href="#download" data-dom-id="nav-download" class="text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">公测预约</a></li>
+        <li><a href="#hero" data-dom-id="nav-index" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">首页</a></li>
+        <li><a href="#world" data-dom-id="nav-world" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">乱世燕云</a></li>
+        <li><a href="#factions" data-dom-id="nav-factions" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">百派林立</a></li>
+        <li><a href="#gameplay" data-dom-id="nav-gameplay" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">江湖百艺</a></li>
+        <li><a href="#download" data-dom-id="nav-download" class="nav-link text-[var(--milk-100)] hover:text-[var(--gold-bright)] text-sm tracking-widest uppercase transition-colors">公测预约</a></li>
       </ul>
       <button type="button" class="md:hidden text-[var(--gold-base)]" aria-label="打开菜单">
         <i data-lucide="menu" class="w-6 h-6"></i>
@@ -620,11 +869,16 @@ select:focus {
 
   <main>
     <!-- Hero -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden ink-edge">
       <div id="hero-bg" class="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" style="background-image: url('assets/hero-mountains.jpg');"></div>
       <div class="absolute inset-0 bg-gradient-to-b from-[var(--wheat-black)]/70 via-[var(--wheat-void)]/40 to-[var(--wheat-black)]"></div>
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(201,164,92,0.12), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(139,38,53,0.15), transparent 45%);"></div>
       <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <p class="text-caption mb-5 reveal">WHERE WINDS MEET</p>
+        <div class="flex items-center justify-center gap-4 mb-6 reveal">
+          <span class="section-title-deco"></span>
+          <p class="text-caption m-0">WHERE WINDS MEET</p>
+          <span class="section-title-deco"></span>
+        </div>
         <h1 class="text-hero mb-6 reveal" title="九流门内部代号：肥羊十六声">燕云十六声</h1>
         <p class="text-subhead mb-10 reveal">五代十国 · 乱世江湖 · 一剑一行</p>
         <div class="flex flex-col sm:flex-row gap-5 justify-center reveal">
@@ -641,22 +895,22 @@ select:focus {
     <section id="world" class="section-dark py-24 lg:py-32 px-6">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16 reveal">
-          <p class="text-caption mb-3">NARRATIVE</p>
+          <div class="section-badge justify-center">NARRATIVE</div>
           <h2 class="text-section mb-5">乱世之局，侠者之心</h2>
           <div class="divider-gold mx-auto divider-animated"></div>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-          <article class="card p-8 reveal">
+          <article class="card corner-flourish p-8 reveal">
             <span class="tag mb-4">01</span>
             <h3 class="text-subhead mb-3">乱世之局</h3>
             <p class="text-body">五代更迭，十国并立。燕云大地烽火连天，山河破碎，每一个选择都可能改写天下棋局。</p>
           </article>
-          <article class="card p-8 reveal">
+          <article class="card corner-flourish p-8 reveal">
             <span class="tag mb-4">02</span>
             <h3 class="text-subhead mb-3">江湖之义</h3>
             <p class="text-body">门派林立，恩怨交织。在这片波谲云诡的江湖里，道义与生存的边界，由你手中的剑来划定。</p>
           </article>
-          <article class="card p-8 reveal">
+          <article class="card corner-flourish p-8 reveal">
             <span class="tag mb-4">03</span>
             <h3 class="text-subhead mb-3">侠者之心</h3>
             <p class="text-body">不为权贵屈膝，不因乱世迷失。纵使前路荆棘密布，真正的侠客仍会追寻心中的那束光。</p>
@@ -677,70 +931,80 @@ select:focus {
         </div>
 
         <!-- Horizontal scrollable faction carousel -->
-        <div class="carousel-wrap reveal mb-2">
+        <div class="carousel-stage reveal mb-2">
           <button type="button" class="carousel-arrow prev" id="faction-prev" aria-label="上一个门派">
             <i data-lucide="chevron-left" class="w-5 h-5"></i>
           </button>
+          <div class="carousel-fade carousel-fade-left"></div>
+          <div class="carousel-fade carousel-fade-right"></div>
           <div class="carousel-track" id="faction-track">
-            <div class="faction-card relative overflow-hidden group" data-target="tianquan">
+            <div class="faction-card relative overflow-hidden group active" data-target="tianquan" data-index="0">
               <img src="assets/tianquan.jpg" alt="天泉" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">壹</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">TIAN QUAN</span>
                 <h3 class="text-section text-3xl">天泉</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="kuanglan">
+            <div class="faction-card relative overflow-hidden group" data-target="kuanglan" data-index="1">
               <img src="assets/kuanglan.jpg" alt="狂澜" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">贰</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">KUANG LAN</span>
                 <h3 class="text-section text-3xl">狂澜</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="sangengtian">
+            <div class="faction-card relative overflow-hidden group" data-target="sangengtian" data-index="2">
               <img src="assets/sangengtian.jpg" alt="三更天" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">叁</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">SAN GENG TIAN</span>
                 <h3 class="text-section text-3xl">三更天</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="jiuliumen">
+            <div class="faction-card relative overflow-hidden group" data-target="jiuliumen" data-index="3">
               <img src="assets/jiuliumen.jpg" alt="九流门" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">肆</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">JIU LIU MEN</span>
                 <h3 class="text-section text-3xl">九流门</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="qingxi">
+            <div class="faction-card relative overflow-hidden group" data-target="qingxi" data-index="4">
               <img src="assets/qingxi.jpg" alt="清溪" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">伍</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">QING XI</span>
                 <h3 class="text-section text-3xl">清溪</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="zuihuayin">
+            <div class="faction-card relative overflow-hidden group" data-target="zuihuayin" data-index="5">
               <img src="assets/zuihuayin.jpg" alt="醉花阴" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">陆</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">ZUI HUA YIN</span>
                 <h3 class="text-section text-3xl">醉花阴</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="guyun">
+            <div class="faction-card relative overflow-hidden group" data-target="guyun" data-index="6">
               <img src="assets/guyun.jpg" alt="孤云" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">柒</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">GU YUN</span>
                 <h3 class="text-section text-3xl">孤云</h3>
               </div>
             </div>
-            <div class="faction-card relative overflow-hidden group" data-target="wuxingu">
+            <div class="faction-card relative overflow-hidden group" data-target="wuxingu" data-index="7">
               <img src="assets/wuxingu.jpg" alt="无心谷" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-black)]/55 to-transparent"></div>
+              <span class="faction-number">捌</span>
               <div class="relative z-10 flex flex-col justify-end h-full p-6">
                 <span class="text-caption mb-2">WU XIN GU</span>
                 <h3 class="text-section text-3xl">无心谷</h3>
@@ -756,9 +1020,10 @@ select:focus {
           <span>滑动或点击箭头查看全部门派</span>
           <i data-lucide="move-horizontal" class="w-4 h-4"></i>
         </div>
+        <div class="carousel-dots reveal" id="faction-dots" aria-hidden="true"></div>
 
         <!-- Faction tabs -->
-        <div class="flex flex-wrap justify-center gap-3 mb-8 reveal" role="tablist" aria-label="门派选择">
+        <div class="flex flex-wrap justify-center gap-3 mb-8 reveal mt-10" role="tablist" aria-label="门派选择">
           <button type="button" data-dom-id="faction-tab-tianquan" class="faction-tab btn-outline active" role="tab" aria-selected="true" data-target="tianquan">天泉</button>
           <button type="button" data-dom-id="faction-tab-kuanglan" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="kuanglan">狂澜</button>
           <button type="button" data-dom-id="faction-tab-sangengtian" class="faction-tab btn-outline" role="tab" aria-selected="false" data-target="sangengtian">三更天</button>
@@ -770,7 +1035,7 @@ select:focus {
         </div>
 
         <!-- Description panel -->
-        <div class="card max-w-3xl mx-auto p-8 lg:p-10 reveal">
+        <div class="card corner-flourish max-w-3xl mx-auto p-8 lg:p-10 reveal">
           <div id="faction-panel-tianquan" class="faction-panel is-active">
             <h3 class="text-subhead mb-3">天泉 · 正道魁首</h3>
             <p class="text-body-lg">天泉派承袭浩然正气，弟子皆以“济世安民”为己任。重剑金甲，招式之间可见山河气象，是乱世中最为百姓所倚重的正道栋梁。</p>
@@ -811,12 +1076,12 @@ select:focus {
     <section id="gameplay" class="section-charcoal py-24 lg:py-32 px-6">
       <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16 reveal">
-          <p class="text-caption mb-3">GAMEPLAY</p>
+          <div class="section-badge justify-center">GAMEPLAY</div>
           <h2 class="text-section mb-5">江湖百艺</h2>
           <div class="divider-gold mx-auto divider-animated"></div>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-          <article class="card group overflow-hidden reveal">
+          <article class="card corner-flourish group overflow-hidden reveal">
             <div class="h-60 overflow-hidden">
               <img src="assets/feature-combat.jpg" alt="自由武学战斗" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
             </div>
@@ -825,7 +1090,7 @@ select:focus {
               <p class="text-body">无职业束缚，百种武学随心搭配。拳脚、兵刃、暗器相生相克，每一次交锋都是一场生死博弈。</p>
             </div>
           </article>
-          <article class="card group overflow-hidden reveal">
+          <article class="card corner-flourish group overflow-hidden reveal">
             <div class="h-60 overflow-hidden">
               <img src="assets/feature-explore.jpg" alt="开放世界探索" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
             </div>
@@ -834,7 +1099,7 @@ select:focus {
               <p class="text-body">燕云大地无缝衔接，古城、荒野、雪域、水乡皆可自由穿行。奇遇暗藏，风景与危险并存。</p>
             </div>
           </article>
-          <article class="card group overflow-hidden reveal">
+          <article class="card corner-flourish group overflow-hidden reveal">
             <div class="h-60 overflow-hidden">
               <img src="assets/gameplay-life.jpg" alt="生活百艺玩法" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
             </div>
@@ -852,7 +1117,7 @@ select:focus {
       <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('assets/download-hero.jpg');"></div>
       <div class="absolute inset-0 bg-gradient-to-t from-[var(--wheat-black)] via-[var(--wheat-void)]/75 to-[var(--wheat-black)]/60"></div>
       <div class="relative z-10 max-w-3xl mx-auto reveal">
-        <p class="text-caption mb-4">OPEN BETA</p>
+        <div class="section-badge justify-center mb-4">OPEN BETA</div>
         <h2 class="text-section mb-6">此刻，入江湖</h2>
         <div class="divider-gold mx-auto divider-animated mb-8"></div>
         <p class="text-body-lg mb-10">乱世已至，燕云再鸣。预约公测，与天下侠士共赴这一场五代十国的武侠长歌。</p>
@@ -993,12 +1258,36 @@ select:focus {
       }, { passive: true });
     }
 
-    // Faction tabs
+    // Active nav link on scroll
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = Array.from(document.querySelectorAll('main > section[id]'));
+    function updateActiveNav() {
+      const scrollPos = window.scrollY + 120;
+      let activeId = sections[0]?.id || 'hero';
+      for (const section of sections) {
+        if (section.offsetTop <= scrollPos) {
+          activeId = section.id;
+        }
+      }
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        link.classList.toggle('active', href === '#' + activeId);
+      });
+    }
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    updateActiveNav();
+
+    // Faction tabs & carousel
     const factionTabs = document.querySelectorAll('.faction-tab');
     const factionPanels = document.querySelectorAll('.faction-panel');
     const factionCards = document.querySelectorAll('.faction-card');
+    const factionTrack = document.getElementById('faction-track');
+    const factionPrev = document.getElementById('faction-prev');
+    const factionNext = document.getElementById('faction-next');
+    const factionDots = document.getElementById('faction-dots');
+    const totalCards = factionCards.length;
 
-    function activateFaction(target) {
+    function activateFaction(target, scrollIntoView = true) {
       factionTabs.forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
@@ -1007,32 +1296,166 @@ select:focus {
           t.setAttribute('aria-selected', 'true');
         }
       });
+      factionCards.forEach(c => {
+        c.classList.remove('active');
+        if (c.dataset.target === target) {
+          c.classList.add('active');
+        }
+      });
       factionPanels.forEach(panel => panel.classList.remove('is-active'));
       const activePanel = document.getElementById('faction-panel-' + target);
       if (activePanel) activePanel.classList.add('is-active');
+      if (scrollIntoView) {
+        const activeCard = document.querySelector('.faction-card[data-target="' + target + '"]');
+        if (activeCard && factionTrack) {
+          activeCard.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        }
+      }
+      updateDots();
+      updateArrows();
     }
 
     factionTabs.forEach(tab => {
       tab.addEventListener('click', () => activateFaction(tab.dataset.target));
     });
 
+    let dragStartedOnTrack = false;
     factionCards.forEach(card => {
-      card.addEventListener('click', () => activateFaction(card.dataset.target));
+      card.addEventListener('click', (e) => {
+        if (dragStartedOnTrack) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragStartedOnTrack = false;
+          return;
+        }
+        activateFaction(card.dataset.target);
+      });
     });
 
-    // Carousel arrow scroll
-    const factionTrack = document.getElementById('faction-track');
-    const factionPrev = document.getElementById('faction-prev');
-    const factionNext = document.getElementById('faction-next');
+    // Carousel arrows
+    function getCardScrollStep() {
+      if (!factionCards.length) return 300;
+      const style = window.getComputedStyle(factionTrack);
+      const gap = parseFloat(style.columnGap || style.gap) || 24;
+      return factionCards[0].offsetWidth + gap;
+    }
+
+    function updateArrows() {
+      if (!factionTrack || !factionPrev || !factionNext) return;
+      const canScrollLeft = factionTrack.scrollLeft > 1;
+      const canScrollRight = factionTrack.scrollLeft < factionTrack.scrollWidth - factionTrack.clientWidth - 1;
+      factionPrev.style.visibility = canScrollLeft ? 'visible' : 'hidden';
+      factionNext.style.visibility = canScrollRight ? 'visible' : 'hidden';
+      factionPrev.disabled = !canScrollLeft;
+      factionNext.disabled = !canScrollRight;
+    }
+
     if (factionTrack && factionPrev && factionNext) {
-      const cardWidth = factionCards[0]?.offsetWidth || 300;
       factionPrev.addEventListener('click', () => {
-        factionTrack.scrollBy({ left: -(cardWidth + 20), behavior: 'smooth' });
+        factionTrack.scrollBy({ left: -getCardScrollStep(), behavior: 'smooth' });
       });
       factionNext.addEventListener('click', () => {
-        factionTrack.scrollBy({ left: cardWidth + 20, behavior: 'smooth' });
+        factionTrack.scrollBy({ left: getCardScrollStep(), behavior: 'smooth' });
+      });
+      factionTrack.addEventListener('scroll', () => {
+        updateArrows();
+        updateDotsFromScroll();
+      }, { passive: true });
+      window.addEventListener('resize', () => {
+        updateArrows();
+        updateDots();
       });
     }
+
+    // Drag-to-scroll for carousel
+    (function enableDragScroll() {
+      if (!factionTrack) return;
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      let moved = false;
+
+      factionTrack.addEventListener('mousedown', (e) => {
+        isDown = true;
+        moved = false;
+        factionTrack.classList.add('active');
+        startX = e.pageX - factionTrack.offsetLeft;
+        scrollLeft = factionTrack.scrollLeft;
+      });
+      factionTrack.addEventListener('mouseleave', () => {
+        isDown = false;
+        factionTrack.classList.remove('active');
+      });
+      factionTrack.addEventListener('mouseup', (e) => {
+        isDown = false;
+        factionTrack.classList.remove('active');
+        // If it was a click (not a drag), let the card click handler run
+        if (!moved) return;
+        e.preventDefault();
+        e.stopPropagation();
+      });
+      factionTrack.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - factionTrack.offsetLeft;
+        const walk = (x - startX) * 1.1;
+        if (Math.abs(walk) > 3) {
+          moved = true;
+          dragStartedOnTrack = true;
+        }
+        factionTrack.scrollLeft = scrollLeft - walk;
+      });
+
+      // Touch swipe already supported by native scroll; add snap after swipe
+      let touchStartX = 0;
+      factionTrack.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      factionTrack.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const delta = touchStartX - touchEndX;
+        if (Math.abs(delta) > 30) {
+          factionTrack.scrollBy({ left: delta > 0 ? getCardScrollStep() : -getCardScrollStep(), behavior: 'smooth' });
+        }
+      }, { passive: true });
+    })();
+
+    // Dots
+    function buildDots() {
+      if (!factionDots) return;
+      factionDots.innerHTML = '';
+      factionCards.forEach((card, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', '跳转到第 ' + (i + 1) + ' 个门派');
+        dot.addEventListener('click', () => {
+          const target = card.dataset.target;
+          activateFaction(target);
+        });
+        factionDots.appendChild(dot);
+      });
+    }
+
+    function updateDots() {
+      if (!factionDots) return;
+      const dots = factionDots.querySelectorAll('.carousel-dot');
+      const activeTab = document.querySelector('.faction-tab.active');
+      const activeTarget = activeTab ? activeTab.dataset.target : 'tianquan';
+      factionCards.forEach((card, i) => {
+        if (dots[i]) dots[i].classList.toggle('active', card.dataset.target === activeTarget);
+      });
+    }
+
+    function updateDotsFromScroll() {
+      if (!factionTrack || !factionDots) return;
+      const dots = factionDots.querySelectorAll('.carousel-dot');
+      const step = getCardScrollStep();
+      const index = Math.max(0, Math.min(dots.length - 1, Math.round(factionTrack.scrollLeft / step)));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    buildDots();
+    setTimeout(() => { updateArrows(); updateDots(); }, 100);
 
     // Reservation modal
     const modal = document.getElementById('reserve-modal');
